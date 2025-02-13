@@ -1,0 +1,79 @@
+### Constants
+@host = host.docker.internal
+@port = 8111
+@user = admin
+@password = admin
+
+### Hardcoded data
+@project-id = homework
+@build-id = helloWorld
+
+### GET all projects
+GET http://{{user}}:{{password}}@{{host}}:{{port}}/app/rest/projects
+Content-Type: application/json
+Accept: application/json
+
+### Create a project
+# @no-cookie-jar
+POST http://{{user}}:{{password}}@{{host}}:{{port}}/app/rest/projects
+Content-Type: application/json
+Accept: application/json
+
+{
+  "parentProject": {
+    "locator": "_Root"
+  },
+  "name": "wtf-homework",
+  "id": "{{project-id}}",
+  "copyAllAssociatedSettings": true
+}
+
+### Create a build type
+# @no-cookie-jar
+POST http://{{user}}:{{password}}@{{host}}:{{port}}/app/rest/buildTypes
+Content-Type: application/json
+Accept: application/json
+
+{
+  "id": "{{build-id}}",
+  "name": "Hello, World!",
+  "project": {
+    "id": "{{project-id}}"
+  },
+  "parameters": {
+    "property": [
+      {
+        "name": "myBuildParameter",
+        "value": "myValue"
+      }
+    ]
+  },
+  "steps": {
+    "step": [
+      {
+        "name": "myCommandLineStep",
+        "type": "simpleRunner",
+        "properties": {
+          "property": [
+            {
+              "name": "script.content",
+              "value": "echo 'Hello World!'"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
+
+### Start a build
+# @no-cookie-jar
+POST http://{{user}}:{{password}}@{{host}}:{{port}}/app/rest/buildQueue
+Content-Type: application/json
+Accept: application/json
+
+{
+  "buildType": {
+    "id": "{{build-id}}"
+  }
+}
