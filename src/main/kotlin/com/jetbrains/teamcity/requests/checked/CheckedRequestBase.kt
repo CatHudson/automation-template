@@ -4,24 +4,20 @@ import com.jetbrains.teamcity.enums.Endpoint
 import com.jetbrains.teamcity.models.BaseModel
 import com.jetbrains.teamcity.requests.CRUDInterface
 import com.jetbrains.teamcity.requests.Request
-import com.jetbrains.teamcity.requests.unchecked.UncheckedBase
-import io.restassured.RestAssured
-import io.restassured.response.Response
-import io.restassured.response.ValidatableResponse
+import com.jetbrains.teamcity.requests.unchecked.UncheckedRequestBase
 import io.restassured.specification.RequestSpecification
 import org.apache.http.HttpStatus
-import kotlin.reflect.KClass
 
 @Suppress("unchecked_cast")
-class CheckedBase<T : BaseModel>(
+class CheckedRequestBase<T : BaseModel>(
     private val spec: RequestSpecification,
     private val endpoint: Endpoint,
 ) : Request(spec, endpoint), CRUDInterface {
 
-    private val uncheckedBase = UncheckedBase(spec, endpoint)
+    private val uncheckedRequestBase = UncheckedRequestBase(spec, endpoint)
 
     override fun create(model: BaseModel): T {
-        return uncheckedBase
+        return uncheckedRequestBase
             .create(model)
             .then()
             .assertThat()
@@ -30,7 +26,7 @@ class CheckedBase<T : BaseModel>(
     }
 
     override fun read(id: Int): T {
-        return uncheckedBase
+        return uncheckedRequestBase
             .read(id)
             .then()
             .assertThat()
@@ -39,7 +35,7 @@ class CheckedBase<T : BaseModel>(
     }
 
     override fun update(id: Int, model: BaseModel): T {
-        return uncheckedBase
+        return uncheckedRequestBase
             .update(id, model)
             .then()
             .assertThat()
@@ -48,7 +44,7 @@ class CheckedBase<T : BaseModel>(
     }
 
     override fun delete(id: Int): Any {
-        return uncheckedBase
+        return uncheckedRequestBase
             .delete(id)
             .then()
             .assertThat()

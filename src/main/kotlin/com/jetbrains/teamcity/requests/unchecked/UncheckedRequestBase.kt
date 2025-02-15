@@ -8,7 +8,7 @@ import io.restassured.RestAssured
 import io.restassured.response.Response
 import io.restassured.specification.RequestSpecification
 
-class UncheckedBase(
+class UncheckedRequestBase(
     private val spec: RequestSpecification,
     private val endpoint: Endpoint
 ): Request(spec, endpoint), CRUDInterface {
