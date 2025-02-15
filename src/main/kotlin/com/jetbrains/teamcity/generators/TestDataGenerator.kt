@@ -55,8 +55,9 @@ object TestDataGenerator {
                         }
 
                         field.isAnnotationPresent(Random::class.java) -> {
-                            if (String::class.java == field.type) {
-                                field.set(instance, RandomData.string)
+                            when (field.type) {
+                                String::class.java -> field.set(instance, RandomData.string)
+                                Int::class.java -> field.set(instance, RandomData.int)
                             }
                         }
 
@@ -72,7 +73,7 @@ object TestDataGenerator {
                             )
                         }
 
-                        MutableList::class.java.isAssignableFrom(field.type) && field.genericType is ParameterizedType -> {
+                        List::class.java.isAssignableFrom(field.type) && field.genericType is ParameterizedType -> {
                             val typeClass = (field.genericType as ParameterizedType).actualTypeArguments[0] as Class<*>
                             if (BaseModel::class.java.isAssignableFrom(typeClass)) {
                                 val finalParams = params
@@ -88,7 +89,14 @@ object TestDataGenerator {
                                         )
                                 )
                             }
+                            else
+                                throw IllegalArgumentException("Cannot generate a List of ${typeClass.typeName} as it is not a ${BaseModel::class.java.typeName} child")
                         }
+
+//                        !BaseModel::class.java.isAssignableFrom(field.type) -> {
+//                            if (!field.type.isPrimitive && field.type != String::class.java)
+//                                throw IllegalArgumentException("${field.type} is not a ${BaseModel::class.java.typeName}")
+//                        }
                     }
                 }
                 field.isAccessible = false

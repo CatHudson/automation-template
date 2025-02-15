@@ -15,6 +15,7 @@ dependencies {
     val restAssuredVersion = "5.5.0"
     val allureVersion = "2.29.1"
     val jacksonVersion = "2.18.2"
+    val assertJVersion = "3.27.3"
 
     implementation("org.seleniumhq.selenium:selenium-java:$seleniumVersion")
     implementation("io.rest-assured:rest-assured:$restAssuredVersion")
@@ -23,6 +24,7 @@ dependencies {
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+    testImplementation("org.assertj:assertj-core:$assertJVersion")
 }
 
 tasks.test {

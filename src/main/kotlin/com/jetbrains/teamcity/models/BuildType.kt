@@ -1,15 +1,17 @@
 package com.jetbrains.teamcity.models
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.jetbrains.teamcity.annotations.Optional
 import com.jetbrains.teamcity.annotations.Parameterizable
 import com.jetbrains.teamcity.annotations.Random
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class BuildType(
-    private val id: Int,
+    val id: String? = null,
     @Random
-    private val name: String,
+    val name: String? = null,
     @Parameterizable
-    private val project: Project,
+    val project: Project? = null,
     @Optional
-    private val steps: Steps,
+    val steps: Steps? = Steps(),
 ): BaseModel()

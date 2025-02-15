@@ -9,4 +9,5 @@ data class User(
     val username: String = "",
     @Random
     val password: String = "",
+    val roles: Roles = Roles()
 ): BaseModel()

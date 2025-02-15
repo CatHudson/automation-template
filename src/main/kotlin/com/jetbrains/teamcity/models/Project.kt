@@ -1,7 +1,13 @@
 package com.jetbrains.teamcity.models
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.jetbrains.teamcity.annotations.Random
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class Project(
-    private val id: Int,
-    private val name: String,
-    private val locator: String = "_Root",
+    @Random
+    val id: String? = null,
+    @Random
+    val name: String? = null,
+    val locator: String? = "_Root",
 ): BaseModel()

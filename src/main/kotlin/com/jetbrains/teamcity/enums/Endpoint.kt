@@ -10,7 +10,7 @@ enum class Endpoint(
     val url: String,
     val modelClass: Class<out BaseModel>,
 ) {
-    BUILD_TYPES("buildTypes", BuildType::class.java),
-    PROJECT("/app/rest/projects", Project::class.java),
-    USER("/app/rest/users", User::class.java),
+    BUILD_TYPES("/app/rest/buildTypes", BuildType::class.java),
+    PROJECTS("/app/rest/projects", Project::class.java),
+    USERS("/app/rest/users", User::class.java),
 }

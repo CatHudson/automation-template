@@ -1,17 +1,20 @@
 package com.jetbrains.teamcity.generators
 
-import org.apache.commons.lang3.RandomStringUtils
-import kotlin.math.max
+import kotlin.random.Random
 
 object RandomData {
     private const val TEST_PREFIX = "test_"
     private const val MAX_LENGTH = 10
 
     val string: String
-        get() = TEST_PREFIX + RandomStringUtils.randomAlphabetic(MAX_LENGTH)
+        get() = TEST_PREFIX + getString()
+    val int: Int
+        get() = Random.nextInt()
 
-    fun getString(length: Int): String {
-        return TEST_PREFIX + RandomStringUtils
-            .randomAlphabetic(max((length - TEST_PREFIX.length).toDouble(), MAX_LENGTH.toDouble()).toInt())
+    private fun getString(length: Int = MAX_LENGTH): String {
+        val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
+        return (1..length)
+             .map { allowedChars.random() }
+            .joinToString("")
     }
 }
