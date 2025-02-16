@@ -4,6 +4,7 @@ import com.jetbrains.teamcity.annotations.Optional
 import com.jetbrains.teamcity.annotations.Parameterizable
 import com.jetbrains.teamcity.annotations.Random
 import com.jetbrains.teamcity.models.BaseModel
+import com.jetbrains.teamcity.models.PesData
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.ParameterizedType
 
@@ -58,6 +59,7 @@ object TestDataGenerator {
                             when (field.type) {
                                 String::class.java -> field.set(instance, RandomData.string)
                                 Int::class.java -> field.set(instance, RandomData.int)
+                                Long::class.java -> field.set(instance, RandomData.long)
                             }
                         }
 
@@ -88,8 +90,7 @@ object TestDataGenerator {
                                             )
                                         )
                                 )
-                            }
-                            else
+                            } else
                                 throw IllegalArgumentException("Cannot generate a List of ${typeClass.typeName} as it is not a ${BaseModel::class.java.typeName} child")
                         }
 
@@ -102,13 +103,7 @@ object TestDataGenerator {
                 field.isAccessible = false
             }
             return instance
-        } catch (e: InstantiationException) {
-            throw IllegalStateException("Cannot generate test data", e)
-        } catch (e: IllegalAccessException) {
-            throw IllegalStateException("Cannot generate test data", e)
-        } catch (e: InvocationTargetException) {
-            throw IllegalStateException("Cannot generate test data", e)
-        } catch (e: NoSuchMethodException) {
+        } catch (e: Exception) {
             throw IllegalStateException("Cannot generate test data", e)
         }
     }
@@ -122,5 +117,24 @@ object TestDataGenerator {
             generatorClass = generatorClass,
             parameters = parameters
         )
+    }
+
+    fun generate(): PesData {
+        try {
+            val instance = PesData::class.java.getDeclaredConstructor().newInstance()
+            val generatedModels = mutableListOf<BaseModel>()
+            PesData::class.java.declaredFields.forEach { field ->
+                field.isAccessible = true
+                if (BaseModel::class.java.isAssignableFrom(field.type)) {
+                    val generatedModel = generate(generatedModels, field.type.asSubclass(BaseModel::class.java))
+                    field.set(instance, generatedModel)
+                    generatedModels.add(generatedModel)
+                    field.isAccessible = false
+                }
+            }
+            return instance
+        } catch (e: Exception) {
+            throw IllegalStateException("Cannot generate test data", e)
+        }
     }
 }

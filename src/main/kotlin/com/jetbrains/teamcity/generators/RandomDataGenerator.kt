@@ -1,5 +1,6 @@
 package com.jetbrains.teamcity.generators
 
+import kotlin.math.absoluteValue
 import kotlin.random.Random
 
 object RandomData {
@@ -10,6 +11,8 @@ object RandomData {
         get() = TEST_PREFIX + getString()
     val int: Int
         get() = Random.nextInt()
+    val long: Long
+        get() = Random.nextLong().absoluteValue
 
     private fun getString(length: Int = MAX_LENGTH): String {
         val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')

@@ -5,7 +5,6 @@ import com.jetbrains.teamcity.extensions.step
 import com.jetbrains.teamcity.generators.TestDataGenerator
 import com.jetbrains.teamcity.models.BuildType
 import com.jetbrains.teamcity.models.Project
-import com.jetbrains.teamcity.models.User
 import com.jetbrains.teamcity.requests.checked.CheckedRequests
 import com.jetbrains.teamcity.requests.unchecked.UncheckedRequests
 import com.jetbrains.teamcity.spec.Specification
@@ -21,10 +20,9 @@ class BuildTypeTest : BaseApiTest() {
     @Tag("CRUD")
     @Tag("Positive")
     fun `user creates a buildType`() {
-        val user = TestDataGenerator.generate(User::class.java)
-        superUserCheckedRequests.getRequest(Endpoint.USERS).create(user)
+        superUserCheckedRequests.getRequest(Endpoint.USERS).create(testData.user)
 
-        val userCheckedRequester = CheckedRequests(Specification.authSpec(user))
+        val userCheckedRequester = CheckedRequests(Specification.authSpec(testData.user))
         val project = TestDataGenerator.generate(Project::class.java)
         val buildType = TestDataGenerator.generate(listOf(project), BuildType::class.java)
 
@@ -44,24 +42,22 @@ class BuildTypeTest : BaseApiTest() {
     @Tag("CRUD")
     @Tag("Negative")
     fun `user cannot create the second buildType with already existing id`() {
-        val user = TestDataGenerator.generate(User::class.java)
-        superUserCheckedRequests.getRequest(Endpoint.USERS).create(user)
+        superUserCheckedRequests.getRequest(Endpoint.USERS).create(testData.user)
 
-        val userCheckedRequester = CheckedRequests(Specification.authSpec(user))
-        val project = TestDataGenerator.generate(Project::class.java)
-        val buildType = TestDataGenerator.generate(listOf(project), BuildType::class.java)
-        val buildType2 = TestDataGenerator.generate(listOf(project), BuildType::class.java, buildType.id!!)
+        val userCheckedRequester = CheckedRequests(Specification.authSpec(testData.user))
+        val buildType = TestDataGenerator.generate(listOf(testData.project), BuildType::class.java)
+        val duplicatedBuildType = TestDataGenerator.generate(listOf(testData.project), BuildType::class.java, buildType.id!!)
 
-        userCheckedRequester.getRequest(Endpoint.PROJECTS).create(project)
+        userCheckedRequester.getRequest(Endpoint.PROJECTS).create(testData.project)
         userCheckedRequester.getRequest(Endpoint.BUILD_TYPES).create(buildType)
 
-        UncheckedRequests(Specification.authSpec(user))
+        UncheckedRequests(Specification.authSpec(testData.user))
             .getRequest(Endpoint.BUILD_TYPES)
-            .create(buildType2)
+            .create(duplicatedBuildType)
             .then()
             .assertThat()
             .statusCode(HttpStatus.SC_BAD_REQUEST)
-            .body(Matchers.containsString("The build configuration / template ID \"${buildType2.id}\" is already used by another configuration or template"))
+            .body(Matchers.containsString("The build configuration / template ID \"${duplicatedBuildType.id}\" is already used by another configuration or template"))
     }
 
     @Test

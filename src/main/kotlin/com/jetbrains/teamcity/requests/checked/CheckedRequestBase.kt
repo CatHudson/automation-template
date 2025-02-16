@@ -1,6 +1,7 @@
 package com.jetbrains.teamcity.requests.checked
 
 import com.jetbrains.teamcity.enums.Endpoint
+import com.jetbrains.teamcity.generators.TestDataStorage
 import com.jetbrains.teamcity.models.BaseModel
 import com.jetbrains.teamcity.requests.CRUDInterface
 import com.jetbrains.teamcity.requests.Request
@@ -17,12 +18,15 @@ class CheckedRequestBase<T : BaseModel>(
     private val uncheckedRequestBase = UncheckedRequestBase(spec, endpoint)
 
     override fun create(model: BaseModel): T {
-        return uncheckedRequestBase
+        val createdModel = uncheckedRequestBase
             .create(model)
             .then()
             .assertThat()
             .statusCode(HttpStatus.SC_OK)
             .extract().`as`(endpoint.modelClass) as T
+
+        TestDataStorage.addCreatedEntity(endpoint, createdModel)
+        return createdModel
     }
 
     override fun read(id: String): T {
@@ -48,6 +52,6 @@ class CheckedRequestBase<T : BaseModel>(
             .delete(id)
             .then()
             .assertThat()
-            .statusCode(HttpStatus.SC_OK)
+            .statusCode(HttpStatus.SC_NO_CONTENT)
     }
 }

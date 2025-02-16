@@ -6,6 +6,8 @@ import com.jetbrains.teamcity.annotations.Random
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class User(
     @Random
+    val id: Long = 0,
+    @Random
     val username: String = "",
     @Random
     val password: String = "",
