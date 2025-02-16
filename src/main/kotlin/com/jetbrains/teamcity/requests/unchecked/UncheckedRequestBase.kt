@@ -21,14 +21,14 @@ class UncheckedRequestBase(
             .post(endpoint.url)
     }
 
-    override fun read(id: Int): Response {
+    override fun read(id: String): Response {
         return RestAssured
             .given()
             .spec(spec)
             .get("${endpoint.url}/id:$id")
     }
 
-    override fun update(id: Int, model: BaseModel): Response {
+    override fun update(id: String, model: BaseModel): Response {
         return RestAssured
             .given()
             .spec(spec)
@@ -36,7 +36,7 @@ class UncheckedRequestBase(
             .put("${endpoint.url}/id:$id")
     }
 
-    override fun delete(id: Int): Response {
+    override fun delete(id: String): Response {
         return RestAssured
             .given()
             .spec(spec)

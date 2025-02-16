@@ -33,10 +33,10 @@ object TestDataGenerator {
      * BuildType will reuse it when setting the NewProjectDescription project field, instead of generating a new one.
      */
     fun <T : BaseModel> generate(
-        generatedModels: MutableList<BaseModel>,
+        generatedModels: List<BaseModel>,
         generatorClass: Class<T>,
         vararg parameters: Any,
-    ): T? {
+    ): T {
         try {
             val instance = generatorClass.getDeclaredConstructor().newInstance()
             var params = parameters
@@ -118,9 +118,9 @@ object TestDataGenerator {
      */
     fun <T : BaseModel> generate(generatorClass: Class<T>, vararg parameters: Any): T {
         return generate<T>(
-            generatedModels = mutableListOf<BaseModel>(),
+            generatedModels = listOf<BaseModel>(),
             generatorClass = generatorClass,
             parameters = parameters
-        )!!
+        )
     }
 }

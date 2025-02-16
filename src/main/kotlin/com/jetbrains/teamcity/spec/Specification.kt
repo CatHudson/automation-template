@@ -1,6 +1,7 @@
 package com.jetbrains.teamcity.spec
 
 import com.jetbrains.teamcity.configuration.Configuration
+import com.jetbrains.teamcity.models.User
 import io.restassured.authentication.BasicAuthScheme
 import io.restassured.builder.RequestSpecBuilder
 import io.restassured.filter.log.RequestLoggingFilter
@@ -26,6 +27,15 @@ object Specification {
         val basicAuthScheme = BasicAuthScheme()
         basicAuthScheme.userName = Configuration.getProperty("username").toString()
         basicAuthScheme.password = Configuration.getProperty("password").toString()
+        return reqBuilder()
+            .setAuth(basicAuthScheme)
+            .build()
+    }
+
+    fun authSpec(user: User): RequestSpecification {
+        val basicAuthScheme = BasicAuthScheme()
+        basicAuthScheme.userName = user.username
+        basicAuthScheme.password = user.password
         return reqBuilder()
             .setAuth(basicAuthScheme)
             .build()

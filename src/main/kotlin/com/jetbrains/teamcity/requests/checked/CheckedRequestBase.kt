@@ -25,7 +25,7 @@ class CheckedRequestBase<T : BaseModel>(
             .extract().`as`(endpoint.modelClass) as T
     }
 
-    override fun read(id: Int): T {
+    override fun read(id: String): T {
         return uncheckedRequestBase
             .read(id)
             .then()
@@ -34,7 +34,7 @@ class CheckedRequestBase<T : BaseModel>(
             .extract().`as`(endpoint.modelClass) as T
     }
 
-    override fun update(id: Int, model: BaseModel): T {
+    override fun update(id: String, model: BaseModel): T {
         return uncheckedRequestBase
             .update(id, model)
             .then()
@@ -43,7 +43,7 @@ class CheckedRequestBase<T : BaseModel>(
             .extract().`as`(endpoint.modelClass) as T
     }
 
-    override fun delete(id: Int): Any {
+    override fun delete(id: String): Any {
         return uncheckedRequestBase
             .delete(id)
             .then()

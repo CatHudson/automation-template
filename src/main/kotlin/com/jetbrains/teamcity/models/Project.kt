@@ -9,5 +9,5 @@ data class Project(
     val id: String? = null,
     @Random
     val name: String? = null,
-    val locator: String? = "_Root",
+    val locator: String? = null,
 ): BaseModel()

@@ -7,6 +7,7 @@ import com.jetbrains.teamcity.annotations.Random
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class BuildType(
+    @Random
     val id: String? = null,
     @Random
     val name: String? = null,
