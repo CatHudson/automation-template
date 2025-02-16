@@ -14,13 +14,17 @@ dependencies {
     val seleniumVersion = "4.28.1"
     val restAssuredVersion = "5.5.0"
     val allureVersion = "2.29.1"
+    val jacksonVersion = "2.18.2"
+    val assertJVersion = "3.27.3"
 
     implementation("org.seleniumhq.selenium:selenium-java:$seleniumVersion")
     implementation("io.rest-assured:rest-assured:$restAssuredVersion")
+    implementation("io.qameta.allure:allure-junit5:$allureVersion")
+    implementation("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
-    testImplementation("io.qameta.allure:allure-junit5:$allureVersion")
+    testImplementation("org.assertj:assertj-core:$assertJVersion")
 }
 
 tasks.test {
