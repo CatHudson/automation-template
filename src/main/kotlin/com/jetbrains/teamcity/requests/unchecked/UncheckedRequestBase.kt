@@ -22,6 +22,9 @@ class UncheckedRequestBase(
             .post(endpoint.url)
     }
 
+    /**
+     * You can pass a parameter name to search by something other than id
+     */
     override fun read(value: String, param: ReadQueryIdType): Response {
         return RestAssured
             .given()

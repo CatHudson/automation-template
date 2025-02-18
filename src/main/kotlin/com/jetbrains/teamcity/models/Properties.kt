@@ -1,6 +1,6 @@
 package com.jetbrains.teamcity.models
 
-data class Steps(
+data class Properties(
     val count: Int = 0,
-    val step: List<Step> = emptyList(),
+    val property: List<Property> = emptyList(),
 ): BaseModel()
