@@ -1,6 +1,7 @@
 package com.jetbrains.teamcity.requests.unchecked
 
 import com.jetbrains.teamcity.enums.Endpoint
+import com.jetbrains.teamcity.enums.ReadQueryIdType
 import com.jetbrains.teamcity.models.BaseModel
 import com.jetbrains.teamcity.requests.CRUDInterface
 import com.jetbrains.teamcity.requests.Request
@@ -21,11 +22,14 @@ class UncheckedRequestBase(
             .post(endpoint.url)
     }
 
-    override fun read(id: String): Response {
+    /**
+     * You can pass a parameter name to search by something other than id
+     */
+    override fun read(value: String, param: ReadQueryIdType): Response {
         return RestAssured
             .given()
             .spec(spec)
-            .get("${endpoint.url}/id:$id")
+            .get("${endpoint.url}/${param.value.lowercase()}:$value")
     }
 
     override fun update(id: String, model: BaseModel): Response {

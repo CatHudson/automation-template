@@ -1,6 +1,7 @@
 package com.jetbrains.teamcity.requests.checked
 
 import com.jetbrains.teamcity.enums.Endpoint
+import com.jetbrains.teamcity.enums.ReadQueryIdType
 import com.jetbrains.teamcity.generators.TestDataStorage
 import com.jetbrains.teamcity.models.BaseModel
 import com.jetbrains.teamcity.requests.CRUDInterface
@@ -29,9 +30,12 @@ class CheckedRequestBase<T : BaseModel>(
         return createdModel
     }
 
-    override fun read(id: String): T {
+    /**
+     * You can pass a parameter name to search by something other than id
+     */
+    override fun read(value: String, param: ReadQueryIdType): T {
         return uncheckedRequestBase
-            .read(id)
+            .read(value, param)
             .then()
             .assertThat()
             .statusCode(HttpStatus.SC_OK)
