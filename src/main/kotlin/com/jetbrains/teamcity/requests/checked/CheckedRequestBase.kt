@@ -30,9 +30,6 @@ class CheckedRequestBase<T : BaseModel>(
         return createdModel
     }
 
-    /**
-     * You can pass a parameter name to search by something other than id
-     */
     override fun read(value: String, param: ReadQueryIdType): T {
         return uncheckedRequestBase
             .read(value, param)
