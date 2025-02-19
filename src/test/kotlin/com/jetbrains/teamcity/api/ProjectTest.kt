@@ -4,11 +4,13 @@ import com.jetbrains.teamcity.enums.Endpoint
 import com.jetbrains.teamcity.enums.ReadQueryIdType
 import com.jetbrains.teamcity.generators.RandomData
 import com.jetbrains.teamcity.generators.TestDataGenerator
+import com.jetbrains.teamcity.models.Locator
 import com.jetbrains.teamcity.models.Project
 import com.jetbrains.teamcity.models.Role
 import com.jetbrains.teamcity.models.Roles
 import com.jetbrains.teamcity.models.User
 import com.jetbrains.teamcity.requests.unchecked.UncheckedRequests
+import com.jetbrains.teamcity.spec.ResponseValidationSpecifications
 import com.jetbrains.teamcity.spec.Specification
 import org.apache.http.HttpStatus
 import org.hamcrest.Matchers
@@ -25,19 +27,147 @@ class ProjectTest : BaseApiTest() {
 
     @Test
     @Tag("Positive")
-    fun `a project can be created if valid data is provided`() {
+    fun `a user can create a project with valid data`() {
         superUserCheckedRequests.getRequest(Endpoint.PROJECTS).create(testData.project)
         val createdProject = superUserCheckedRequests.getRequest<Project>(Endpoint.PROJECTS).read(testData.project.id!!)
 
-        softy.assertThat(createdProject.id).isEqualTo(testData.project.id)
-        softy.assertThat(createdProject.name).isEqualTo(testData.project.name)
+        softy.assertThat(createdProject).isEqualTo(testData.project)
+    }
+
+    @Test
+    @Tag("Positive")
+    fun `a user can create a project with one symbol length id`() {
+        val project = testData.project.copy(RandomData.getString(1))
+        superUserCheckedRequests.getRequest(Endpoint.PROJECTS).create(project)
+        val createdProject = superUserCheckedRequests.getRequest<Project>(Endpoint.PROJECTS).read(project.id!!)
+
+        softy.assertThat(createdProject).isEqualTo(project)
+    }
+
+    @Test
+    @Tag("Positive")
+    fun `a user can create a project with 225 symbols length id`() {
+        val project = testData.project.copy(id = RandomData.getString(225))
+        superUserCheckedRequests.getRequest(Endpoint.PROJECTS).create(project)
+        val createdProject = superUserCheckedRequests.getRequest<Project>(Endpoint.PROJECTS).read(project.id!!)
+
+        softy.assertThat(createdProject).isEqualTo(project)
+    }
+
+    @Test
+    @Tag("Positive")
+    fun `a user can create a project with cyrillic name`() {
+        val project = testData.project.copy(RandomData.getCyrillicString())
+        superUserCheckedRequests.getRequest(Endpoint.PROJECTS).create(project)
+        val createdProject = superUserCheckedRequests.getRequest<Project>(Endpoint.PROJECTS).read(project.id!!)
+
+        softy.assertThat(createdProject).isEqualTo(project)
+    }
+
+    @Test
+    @Tag("Positive")
+    fun `a user should be able to copy a project`() {
+        superUserCheckedRequests.getRequest(Endpoint.PROJECTS).create(testData.project)
+        val originalProject = superUserCheckedRequests.getRequest<Project>(Endpoint.PROJECTS).read(testData.project.id!!)
+
+        val copiedProject = TestDataGenerator.generate().project.copy(sourceProject = Locator(originalProject.id!!))
+        superUserCheckedRequests.getRequest(Endpoint.PROJECTS).create(copiedProject)
+
+        val createdCopiedProject = superUserCheckedRequests.getRequest<Project>(Endpoint.PROJECTS).read(copiedProject.id!!)
+
+        softy.assertThat(createdCopiedProject.id).isEqualTo(copiedProject.id)
+        softy.assertThat(createdCopiedProject.name).isEqualTo(copiedProject.name)
+    }
+
+    @Test
+    @Tag("Positive")
+    fun `a user should be able to copy a project with 'copyAllAssociatedSettings' false`() {
+        superUserCheckedRequests.getRequest(Endpoint.PROJECTS).create(testData.project)
+        val originalProject = superUserCheckedRequests.getRequest<Project>(Endpoint.PROJECTS).read(testData.project.id!!)
+
+        val copiedProject = TestDataGenerator.generate().project.copy(copyAllAssociatedSettings = false, sourceProject = Locator(originalProject.id!!))
+        superUserCheckedRequests.getRequest(Endpoint.PROJECTS).create(copiedProject)
+
+        val createdCopiedProject = superUserCheckedRequests.getRequest<Project>(Endpoint.PROJECTS).read(copiedProject.id!!)
+
+        softy.assertThat(createdCopiedProject.id).isEqualTo(copiedProject.id)
+        softy.assertThat(createdCopiedProject.name).isEqualTo(copiedProject.name)
+    }
+
+    @Test
+    @Tag("Negative")
+    fun `a user should not be able to copy a non-existent project`() {
+        val sourceProjectName = RandomData.getString()
+        val copiedProject = TestDataGenerator.generate().project.copy(sourceProject = Locator(sourceProjectName))
+        superUserUncheckedRequests
+            .getRequest(Endpoint.PROJECTS)
+            .create(copiedProject)
+            .then()
+            .assertThat()
+            .statusCode(HttpStatus.SC_NOT_FOUND)
+            .body(Matchers.containsString("No project found by name or internal/external id '$sourceProjectName'"))
+    }
+
+    @ParameterizedTest
+    @Tag("Negative")
+    @ValueSource(strings = ["", " "])
+    @NullSource
+    fun `a user should not be able to copy a project with passing empty or null sourceProject locator`(locator: String?) {
+        val copiedProject = TestDataGenerator.generate().project.copy(sourceProject = Locator(locator))
+        superUserUncheckedRequests
+            .getRequest(Endpoint.PROJECTS)
+            .create(copiedProject)
+            .then()
+            .assertThat()
+            .statusCode(HttpStatus.SC_BAD_REQUEST)
+//            .body(Matchers.containsString("No project specified. Either 'id', 'internalId' or 'locator' attribute should be present."))
+    }
+
+    @Test
+    @Tag("Negative")
+    fun `a user cannot create a project with the same id`() {
+        val duplicatedProject = TestDataGenerator.generate().project.copy(id = testData.project.id)
+
+        superUserCheckedRequests.getRequest(Endpoint.PROJECTS).create(testData.project)
+        superUserUncheckedRequests
+            .getRequest(Endpoint.PROJECTS)
+            .create(duplicatedProject)
+            .then()
+            .spec(ResponseValidationSpecifications.checkProjectWithIdAlreadyExist(duplicatedProject.id!!))
+    }
+
+    @Test
+    @Tag("Negative")
+    fun `a user cannot create a project with the same name`() {
+        val duplicatedProject = TestDataGenerator.generate().project.copy(name = testData.project.name)
+
+        superUserCheckedRequests.getRequest(Endpoint.PROJECTS).create(testData.project)
+        superUserUncheckedRequests
+            .getRequest(Endpoint.PROJECTS)
+            .create(duplicatedProject)
+            .then()
+            .spec(ResponseValidationSpecifications.checkProjectWithNameAlreadyExist(duplicatedProject.name!!))
+    }
+
+    @Test
+    @Tag("Negative")
+    fun `a user cannot create a project with 226 symbols length id`() {
+        val invalidProjectId = RandomData.getString(226)
+        superUserUncheckedRequests
+            .getRequest(Endpoint.PROJECTS)
+            .create(testData.project.copy(id = invalidProjectId))
+            .then()
+            .assertThat()
+            .statusCode(HttpStatus.SC_BAD_REQUEST) //throws 500: INTERNAL for a whitespace string
+            .body(Matchers.containsString("Project ID \"$invalidProjectId\" is invalid:" +
+                    " it is ${invalidProjectId.length} characters long while the maximum length is 225"))
     }
 
     @ParameterizedTest
     @Tag("Negative")
     @NullSource
     @ValueSource(strings = ["", " "])
-    fun `a project cannot be created with an empty or null name`(name: String?) {
+    fun `a user cannot create a project with an empty or null name`(name: String?) {
         superUserUncheckedRequests
             .getRequest(Endpoint.PROJECTS)
             .create(testData.project.copy(name = name))
@@ -49,8 +179,8 @@ class ProjectTest : BaseApiTest() {
 
     @ParameterizedTest
     @Tag("Negative")
-    @ValueSource(strings = ["", " ", "1", " test"])
-    fun `a project cannot be created with invalid id`(id: String) {
+    @ValueSource(strings = ["", " ", "1", " test", "!@#$", "ололо", "_id"])
+    fun `a user cannot create a project with an invalid id`(id: String) {
         superUserUncheckedRequests
             .getRequest(Endpoint.PROJECTS)
             .create(testData.project.copy(id = id))
@@ -61,29 +191,25 @@ class ProjectTest : BaseApiTest() {
 
     @Test
     @Tag("Negative")
-    fun `a project cannot be created without auth`() {
+    fun `a user cannot create a project without auth`() {
         UncheckedRequests(Specification.unAuthSpec())
             .getRequest(Endpoint.PROJECTS)
             .create(testData.project)
             .then()
-            .assertThat()
-            .statusCode(HttpStatus.SC_UNAUTHORIZED)
-            .body(Matchers.containsString("Authentication required"))
+            .spec(ResponseValidationSpecifications.checkUnauthorizedError())
     }
 
     @ParameterizedTest
     @Tag("Negative")
     @MethodSource("usersWithoutProjectCreationRights")
-    fun `a project cannot be created by a user without admin rights`(user: User) {
+    fun `a user without admin rights cannot create a project`(user: User) {
         superUserCheckedRequests.getRequest(Endpoint.USERS).create(user)
 
         UncheckedRequests(Specification.authSpec(user))
             .getRequest(Endpoint.PROJECTS)
             .create(testData.project)
             .then()
-            .assertThat()
-            .statusCode(HttpStatus.SC_FORBIDDEN)
-            .body(Matchers.containsString("Access denied"))
+            .spec(ResponseValidationSpecifications.checkUnauthorizedError())
     }
 
     //Advanced homework ↓↓↓
@@ -100,23 +226,22 @@ class ProjectTest : BaseApiTest() {
                 param = ReadQueryIdType.NAME
             )
 
-        softy.assertThat(createdProject.id).isEqualTo(testData.project.id)
-        softy.assertThat(createdProject.name).isEqualTo(testData.project.name)
+        softy.assertThat(createdProject).isEqualTo(testData.project)
     }
 
     @Test
-    @Tag("Positive")
+    @Tag("Negative")
     fun `a non-existent project request returns 404 not found`() {
         superUserUncheckedRequests
             .getRequest(Endpoint.PROJECTS)
-            .read(RandomData.string)
+            .read(RandomData.getString())
             .then()
             .assertThat()
             .statusCode(HttpStatus.SC_NOT_FOUND)
     }
 
     @Test
-    @Tag("Positive")
+    @Tag("Negative")
     fun `a project cannot be found by name by an unauthorized user`() {
         superUserCheckedRequests.getRequest(Endpoint.PROJECTS).create(testData.project)
 
@@ -127,9 +252,7 @@ class ProjectTest : BaseApiTest() {
                 param = ReadQueryIdType.NAME
             )
             .then()
-            .assertThat()
-            .statusCode(HttpStatus.SC_UNAUTHORIZED)
-            .body(Matchers.containsString("Authentication required"))
+            .spec(ResponseValidationSpecifications.checkUnauthorizedError())
     }
 
     companion object {

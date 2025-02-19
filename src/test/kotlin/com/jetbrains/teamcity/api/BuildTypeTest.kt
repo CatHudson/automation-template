@@ -11,7 +11,12 @@ import com.jetbrains.teamcity.models.Step
 import com.jetbrains.teamcity.models.Steps
 import com.jetbrains.teamcity.requests.checked.CheckedRequests
 import com.jetbrains.teamcity.requests.unchecked.UncheckedRequests
+import com.jetbrains.teamcity.spec.ResponseValidationSpecifications
 import com.jetbrains.teamcity.spec.Specification
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.withContext
 import org.apache.http.HttpStatus
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.Tag
@@ -33,12 +38,7 @@ class BuildTypeTest : BaseApiTest() {
 
         val createdBuildType = userCheckedRequester.getRequest<BuildType>(Endpoint.BUILD_TYPES).read(testData.buildType.id!!)
 
-        softy.assertThat(createdBuildType.id).isNotEmpty
-        softy.assertThat(createdBuildType.name).isEqualTo(testData.buildType.name)
-        softy.assertThat(createdBuildType.project?.id).isEqualTo(testData.buildType.project?.id)
-        softy.assertThat(createdBuildType.project?.name).isEqualTo(testData.buildType.project?.name)
-        softy.assertThat(createdBuildType.steps?.count).isEqualTo(testData.buildType.steps?.count)
-        softy.assertThat(createdBuildType.steps?.step).isEqualTo(testData.buildType.steps?.step)
+        softy.assertThat(createdBuildType).isEqualTo(testData.buildType)
     }
 
     @Test
@@ -94,9 +94,7 @@ class BuildTypeTest : BaseApiTest() {
             .getRequest(Endpoint.BUILD_TYPES)
             .create(buildTypeForAnotherProject)
             .then()
-            .assertThat()
-            .statusCode(HttpStatus.SC_FORBIDDEN)
-            .body(Matchers.containsString("Access denied. Check the user has enough permissions to perform the operation."))
+            .spec(ResponseValidationSpecifications.checkForbiddenError())
     }
 
     //Advanced homework ↓↓↓
@@ -104,7 +102,7 @@ class BuildTypeTest : BaseApiTest() {
     @Test
     @Tag("CRUD")
     @Tag("Positive")
-    fun `create and launch a buildType with 'hello, world' in console`() {
+    fun `create and launch a buildType with 'hello, world' in console`() = runTest {
         val buildTypeWithStep = testData.buildType.copy(steps = Steps(1, listOf(Step.printHelloWorldStep)))
         val buildRun = TestDataGenerator.generate(listOf(buildTypeWithStep), BuildRun::class.java)
 
@@ -120,7 +118,7 @@ class BuildTypeTest : BaseApiTest() {
         softy.assertThat(buildResult.status).isEqualTo("SUCCESS")
     }
 
-    private fun waitForBuildCompletion(createdBuildRun: BuildRun): BuildRun {
+    private suspend fun waitForBuildCompletion(createdBuildRun: BuildRun): BuildRun {
         var result: BuildRun? = null
         var attempts = 0
         val maxAttempts = 20
@@ -131,11 +129,13 @@ class BuildTypeTest : BaseApiTest() {
                 .read(createdBuildRun.id.toString()) as BuildRun
 
             attempts++
-            Thread.sleep(500)
+            withContext(Dispatchers.Default) {
+                delay(500)
+            }
         }
 
         if (attempts >= maxAttempts)
-            throw AssertionError("The build configuration has been exceeded $maxAttempts attempts")
+            throw AssertionError("The build configuration has exceeded $maxAttempts attempts")
 
         return result!!
     }

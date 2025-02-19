@@ -9,5 +9,7 @@ data class Project(
     val id: String? = null,
     @Random
     val name: String? = null,
-    val locator: String? = null,
+    val locator: String? = "_Root",
+    val copyAllAssociatedSettings: Boolean? = null,
+    val sourceProject: Locator? = null,
 ): BaseModel()

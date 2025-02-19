@@ -10,6 +10,7 @@ repositories {
 }
 
 dependencies {
+    val kotlinCoroutinesVersion = "1.10.1"
     val junitVersion = "5.11.4"
     val seleniumVersion = "4.28.1"
     val restAssuredVersion = "5.5.0"
@@ -21,6 +22,7 @@ dependencies {
     implementation("io.rest-assured:rest-assured:$restAssuredVersion")
     implementation("io.qameta.allure:allure-junit5:$allureVersion")
     implementation("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinCoroutinesVersion")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")

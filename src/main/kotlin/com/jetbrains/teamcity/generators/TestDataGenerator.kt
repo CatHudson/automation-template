@@ -57,9 +57,10 @@ object TestDataGenerator {
 
                         field.isAnnotationPresent(Random::class.java) -> {
                             when (field.type) {
-                                String::class.java -> field.set(instance, RandomData.string)
+                                String::class.java -> field.set(instance, RandomData.getString())
                                 Int::class.java -> field.set(instance, RandomData.int)
                                 Long::class.java -> field.set(instance, RandomData.long)
+                                Boolean::class.java -> field.set(instance, RandomData.boolean)
                             }
                         }
 
