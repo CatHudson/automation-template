@@ -49,4 +49,10 @@ object Specification {
             .setAuth(basicAuthScheme)
             .build()
     }
+
+    fun mockSpec(): RequestSpecification {
+        return reqBuilder()
+            .setBaseUri("http://localhost:8081")
+            .build()
+    }
 }

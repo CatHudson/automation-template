@@ -1,11 +1,11 @@
 package com.jetbrains.teamcity.requests.checked
 
 import com.jetbrains.teamcity.enums.Endpoint
-import com.jetbrains.teamcity.enums.ReadQueryIdType
 import com.jetbrains.teamcity.generators.TestDataStorage
 import com.jetbrains.teamcity.models.BaseModel
 import com.jetbrains.teamcity.requests.CRUDInterface
 import com.jetbrains.teamcity.requests.Request
+import com.jetbrains.teamcity.requests.SearchInterface
 import com.jetbrains.teamcity.requests.unchecked.UncheckedRequestBase
 import io.restassured.specification.RequestSpecification
 import org.apache.http.HttpStatus
@@ -14,7 +14,7 @@ import org.apache.http.HttpStatus
 class CheckedRequestBase<T : BaseModel>(
     private val spec: RequestSpecification,
     private val endpoint: Endpoint,
-) : Request(spec, endpoint), CRUDInterface {
+) : Request(spec, endpoint), CRUDInterface, SearchInterface {
 
     private val uncheckedRequestBase = UncheckedRequestBase(spec, endpoint)
 
@@ -33,9 +33,9 @@ class CheckedRequestBase<T : BaseModel>(
     /**
      * You can pass a parameter name to search by something other than id
      */
-    override fun read(value: String, param: ReadQueryIdType): T {
+    override fun read(id: String): T {
         return uncheckedRequestBase
-            .read(value, param)
+            .read(id)
             .then()
             .assertThat()
             .statusCode(HttpStatus.SC_OK)
@@ -57,5 +57,23 @@ class CheckedRequestBase<T : BaseModel>(
             .then()
             .assertThat()
             .statusCode(HttpStatus.SC_NO_CONTENT)
+    }
+
+    override fun search(query: String): List<T> {
+        return uncheckedRequestBase
+            .search(query)
+            .then()
+            .assertThat()
+            .statusCode(HttpStatus.SC_OK)
+            .extract().jsonPath().getList<T>("project")
+    }
+
+    override fun filter(filters: Map<String, String>): List<T> {
+        return uncheckedRequestBase
+            .filter(filters)
+            .then()
+            .assertThat()
+            .statusCode(HttpStatus.SC_OK)
+            .extract().jsonPath().getList<T>("project")
     }
 }

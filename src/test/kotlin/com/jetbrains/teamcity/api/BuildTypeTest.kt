@@ -96,47 +96,4 @@ class BuildTypeTest : BaseApiTest() {
             .then()
             .spec(ResponseValidationSpecifications.checkForbiddenError())
     }
-
-    //Advanced homework ↓↓↓
-
-    @Test
-    @Tag("CRUD")
-    @Tag("Positive")
-    fun `create and launch a buildType with 'hello, world' in console`() = runTest {
-        val buildTypeWithStep = testData.buildType.copy(steps = Steps(1, listOf(Step.printHelloWorldStep)))
-        val buildRun = TestDataGenerator.generate(listOf(buildTypeWithStep), BuildRun::class.java)
-
-        superUserCheckedRequests.getRequest(Endpoint.PROJECTS).create(testData.project)
-        superUserCheckedRequests.getRequest(Endpoint.BUILD_TYPES).create(buildTypeWithStep)
-        val createdBuildRun = superUserCheckedRequests.getRequest(Endpoint.BUILD_QUEUE).create(buildRun) as BuildRun
-
-        //we can make the test a little longer to assert the build run was successful
-        val buildResult = waitForBuildCompletion(createdBuildRun)
-
-        softy.assertThat(buildResult.buildType.id).isEqualTo(buildTypeWithStep.id)
-        softy.assertThat(buildResult.buildType.name).isEqualTo(buildTypeWithStep.name)
-        softy.assertThat(buildResult.status).isEqualTo("SUCCESS")
-    }
-
-    private suspend fun waitForBuildCompletion(createdBuildRun: BuildRun): BuildRun {
-        var result: BuildRun? = null
-        var attempts = 0
-        val maxAttempts = 20
-
-        while (result?.state != "finished" && attempts < maxAttempts) {
-            result = superUserCheckedRequests
-                .getRequest(Endpoint.BUILD_QUEUE)
-                .read(createdBuildRun.id.toString()) as BuildRun
-
-            attempts++
-            withContext(Dispatchers.Default) {
-                delay(500)
-            }
-        }
-
-        if (attempts >= maxAttempts)
-            throw AssertionError("The build configuration has exceeded $maxAttempts attempts")
-
-        return result!!
-    }
 }

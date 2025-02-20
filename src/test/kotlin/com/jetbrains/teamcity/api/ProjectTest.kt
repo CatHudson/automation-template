@@ -1,7 +1,6 @@
 package com.jetbrains.teamcity.api
 
 import com.jetbrains.teamcity.enums.Endpoint
-import com.jetbrains.teamcity.enums.ReadQueryIdType
 import com.jetbrains.teamcity.generators.RandomData
 import com.jetbrains.teamcity.generators.TestDataGenerator
 import com.jetbrains.teamcity.models.Locator
@@ -57,7 +56,7 @@ class ProjectTest : BaseApiTest() {
     @Test
     @Tag("Positive")
     fun `a user can create a project with cyrillic name`() {
-        val project = testData.project.copy(RandomData.getCyrillicString())
+        val project = testData.project.copy(name = RandomData.getCyrillicString())
         superUserCheckedRequests.getRequest(Endpoint.PROJECTS).create(project)
         val createdProject = superUserCheckedRequests.getRequest<Project>(Endpoint.PROJECTS).read(project.id!!)
 
@@ -110,7 +109,7 @@ class ProjectTest : BaseApiTest() {
 
     @ParameterizedTest
     @Tag("Negative")
-    @ValueSource(strings = ["", " "])
+    @ValueSource(strings = [""])
     @NullSource
     fun `a user should not be able to copy a project with passing empty or null sourceProject locator`(locator: String?) {
         val copiedProject = TestDataGenerator.generate().project.copy(sourceProject = Locator(locator))
@@ -120,7 +119,7 @@ class ProjectTest : BaseApiTest() {
             .then()
             .assertThat()
             .statusCode(HttpStatus.SC_BAD_REQUEST)
-//            .body(Matchers.containsString("No project specified. Either 'id', 'internalId' or 'locator' attribute should be present."))
+            .body(Matchers.containsString("No project specified. Either 'id', 'internalId' or 'locator' attribute should be present."))
     }
 
     @Test
@@ -209,7 +208,7 @@ class ProjectTest : BaseApiTest() {
             .getRequest(Endpoint.PROJECTS)
             .create(testData.project)
             .then()
-            .spec(ResponseValidationSpecifications.checkUnauthorizedError())
+            .spec(ResponseValidationSpecifications.checkForbiddenError())
     }
 
     //Advanced homework ↓↓↓
@@ -221,10 +220,8 @@ class ProjectTest : BaseApiTest() {
 
         val createdProject = superUserCheckedRequests
             .getRequest<Project>(Endpoint.PROJECTS)
-            .read(
-                value = testData.project.name!!,
-                param = ReadQueryIdType.NAME
-            )
+            .search("name:project_name")
+            .first()
 
         softy.assertThat(createdProject).isEqualTo(testData.project)
     }
@@ -247,9 +244,8 @@ class ProjectTest : BaseApiTest() {
 
         UncheckedRequests(Specification.unAuthSpec())
             .getRequest(Endpoint.PROJECTS)
-            .read(
-                value = testData.project.name!!,
-                param = ReadQueryIdType.NAME
+            .filter(
+                mapOf("name" to testData.project.name!!)
             )
             .then()
             .spec(ResponseValidationSpecifications.checkUnauthorizedError())

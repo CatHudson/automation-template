@@ -16,12 +16,12 @@ object RandomData {
 
     fun getString(length: Int = MAX_LENGTH): String {
         val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
-        return TEST_PREFIX + (1..length)
+        return TEST_PREFIX + (1..length - TEST_PREFIX.length)
             .map { allowedChars.random() }
             .joinToString("")
     }
 
-    fun getCyrillicString(length: Int = MAX_LENGTH): String {
+    fun getCyrillicString(length: Int = MAX_LENGTH - TEST_PREFIX.length): String {
         val allowedChars = ('А'..'Я') + ('а'..'я') + ('0'..'9')
         return TEST_PREFIX + (1..length)
             .map { allowedChars.random() }

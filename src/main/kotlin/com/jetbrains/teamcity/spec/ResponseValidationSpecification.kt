@@ -7,9 +7,8 @@ import org.hamcrest.Matchers
 
 object ResponseValidationSpecifications {
 
-    private val responseSpecBuilder = ResponseSpecBuilder()
-
     fun checkProjectWithNameAlreadyExist(projectName: String): ResponseSpecification {
+        val responseSpecBuilder = ResponseSpecBuilder()
         responseSpecBuilder.expectStatusCode(HttpStatus.SC_BAD_REQUEST)
         responseSpecBuilder.expectBody(
             Matchers.containsString("Project with this name already exists: $projectName")
@@ -18,6 +17,7 @@ object ResponseValidationSpecifications {
     }
 
     fun checkProjectWithIdAlreadyExist(projectId: String): ResponseSpecification {
+        val responseSpecBuilder = ResponseSpecBuilder()
         responseSpecBuilder.expectStatusCode(HttpStatus.SC_BAD_REQUEST)
         responseSpecBuilder.expectBody(
             Matchers.containsString("Project ID \"$projectId\" is already used by another project")
@@ -26,6 +26,7 @@ object ResponseValidationSpecifications {
     }
 
     fun checkForbiddenError(): ResponseSpecification {
+        val responseSpecBuilder = ResponseSpecBuilder()
         responseSpecBuilder.expectStatusCode(HttpStatus.SC_FORBIDDEN)
         responseSpecBuilder.expectBody(
             Matchers.containsString("Access denied. Check the user has enough permissions to perform the operation.")
@@ -34,6 +35,7 @@ object ResponseValidationSpecifications {
     }
 
     fun checkUnauthorizedError(): ResponseSpecification {
+        val responseSpecBuilder = ResponseSpecBuilder()
         responseSpecBuilder.expectStatusCode(HttpStatus.SC_UNAUTHORIZED)
         responseSpecBuilder.expectBody(
             Matchers.containsString("Authentication required")
