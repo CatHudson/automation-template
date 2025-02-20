@@ -51,15 +51,18 @@ class UncheckedRequestBase(
         return RestAssured
             .given()
             .spec(spec)
-            .queryParam("q", query)
-            .get(endpoint.url + "/search")
+            .get("${endpoint.url}/$query")
     }
 
     override fun filter(filters: Map<String, String>): Response {
+        val locatorValue = filters.entries
+            .joinToString(",") { "${it.key}:${it.value}" }
+
         return RestAssured
             .given()
             .spec(spec)
-            .queryParams(filters)
+            .queryParam("locator", locatorValue)
             .get(endpoint.url)
+
     }
 }

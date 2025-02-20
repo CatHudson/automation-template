@@ -59,13 +59,13 @@ class CheckedRequestBase<T : BaseModel>(
             .statusCode(HttpStatus.SC_NO_CONTENT)
     }
 
-    override fun search(query: String): List<T> {
+    override fun search(query: String): T {
         return uncheckedRequestBase
             .search(query)
             .then()
             .assertThat()
             .statusCode(HttpStatus.SC_OK)
-            .extract().jsonPath().getList<T>("project")
+            .extract().`as`(endpoint.modelClass) as T
     }
 
     override fun filter(filters: Map<String, String>): List<T> {

@@ -36,7 +36,7 @@ class ProjectTest : BaseApiTest() {
     @Test
     @Tag("Positive")
     fun `a user can create a project with one symbol length id`() {
-        val project = testData.project.copy(RandomData.getString(1))
+        val project = testData.project.copy(id = RandomData.getString(1))
         superUserCheckedRequests.getRequest(Endpoint.PROJECTS).create(project)
         val createdProject = superUserCheckedRequests.getRequest<Project>(Endpoint.PROJECTS).read(project.id!!)
 
@@ -220,8 +220,7 @@ class ProjectTest : BaseApiTest() {
 
         val createdProject = superUserCheckedRequests
             .getRequest<Project>(Endpoint.PROJECTS)
-            .search("name:project_name")
-            .first()
+            .search("name:${testData.project.name}")
 
         softy.assertThat(createdProject).isEqualTo(testData.project)
     }
@@ -244,9 +243,7 @@ class ProjectTest : BaseApiTest() {
 
         UncheckedRequests(Specification.unAuthSpec())
             .getRequest(Endpoint.PROJECTS)
-            .filter(
-                mapOf("name" to testData.project.name!!)
-            )
+            .search("name:${testData.project.name}")
             .then()
             .spec(ResponseValidationSpecifications.checkUnauthorizedError())
     }
