@@ -8,4 +8,13 @@ data class BuildRun(
     val buildType: BuildType = BuildType(),
     val status: String = "",
     val state: String = "",
-): BaseModel()
+): BaseModel() {
+
+    enum class Status(val value: String) {
+        SUCCESS("SUCCESS")
+    }
+
+    enum class State(val value: String) {
+        FINISHED("finished")
+    }
+}

@@ -5,7 +5,6 @@ import com.jetbrains.teamcity.annotations.Parameterizable
 import com.jetbrains.teamcity.annotations.Random
 import com.jetbrains.teamcity.models.BaseModel
 import com.jetbrains.teamcity.models.PesData
-import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.ParameterizedType
 
 object TestDataGenerator {
@@ -57,9 +56,10 @@ object TestDataGenerator {
 
                         field.isAnnotationPresent(Random::class.java) -> {
                             when (field.type) {
-                                String::class.java -> field.set(instance, RandomData.string)
+                                String::class.java -> field.set(instance, RandomData.getString())
                                 Int::class.java -> field.set(instance, RandomData.int)
                                 Long::class.java -> field.set(instance, RandomData.long)
+                                Boolean::class.java -> field.set(instance, RandomData.boolean)
                             }
                         }
 
