@@ -8,10 +8,13 @@ import com.jetbrains.teamcity.api.models.User
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
-import ui.pages.LoginPage
+import org.junit.jupiter.api.Timeout
+import com.jetbrains.teamcity.ui.pages.LoginPage
+import java.util.concurrent.TimeUnit
 import com.codeborne.selenide.Configuration as SelenideConfig
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Timeout(value = 40, unit = TimeUnit.SECONDS)
 open class BaseUiTest : BaseTest() {
 
     @BeforeAll

@@ -1,9 +1,9 @@
-package ui.pages.admin
+package com.jetbrains.teamcity.ui.pages.admin
 
 import com.codeborne.selenide.Condition.visible
 import com.codeborne.selenide.Selectors.byName
 import com.codeborne.selenide.Selenide.`$`
-import ui.pages.BasePage
+import com.jetbrains.teamcity.ui.pages.BasePage
 
 abstract class CreateBasePage: BasePage() {
 

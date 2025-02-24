@@ -1,9 +1,8 @@
-package ui.pages.admin
+package com.jetbrains.teamcity.ui.pages.admin
 
 import com.codeborne.selenide.Selectors.byName
 import com.codeborne.selenide.Selenide
 import com.codeborne.selenide.Selenide.`$`
-import ui.pages.ProjectsPage
 
 class CreateProjectPage : CreateBasePage() {
 
@@ -28,10 +27,9 @@ class CreateProjectPage : CreateBasePage() {
         return this
     }
 
-    fun setupProject(projectName: String, buildName: String): ProjectsPage {
+    fun setupProject(projectName: String, buildName: String) {
         projectNameInput.`val`(projectName)
         buildNameInput.`val`(buildName)
         proceedButton.click()
-        return Selenide.page(ProjectsPage::class.java)
     }
 }

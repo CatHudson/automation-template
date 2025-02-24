@@ -1,4 +1,4 @@
-package ui.pages
+package com.jetbrains.teamcity.ui.pages
 
 import com.codeborne.selenide.Selenide
 import com.codeborne.selenide.Selenide.`$`

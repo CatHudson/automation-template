@@ -1,16 +1,14 @@
 package com.jetbrains.teamcity.ui
 
 import com.codeborne.selenide.Condition
-import com.codeborne.selenide.Condition.visible
-import com.codeborne.selenide.Selenide
-import com.codeborne.selenide.SelenideConfig
 import com.jetbrains.teamcity.api.enums.Endpoint
 import com.jetbrains.teamcity.api.extensions.step
 import com.jetbrains.teamcity.api.models.Project
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
-import ui.pages.ProjectPage
-import ui.pages.admin.CreateProjectPage
+import com.jetbrains.teamcity.ui.pages.ProjectPage
+import com.jetbrains.teamcity.ui.pages.ProjectsPage
+import com.jetbrains.teamcity.ui.pages.admin.CreateProjectPage
 
 @Tag("Regression")
 class CreateProjectTest : BaseUiTest() {
@@ -34,6 +32,8 @@ class CreateProjectTest : BaseUiTest() {
         softy.assertThat(createdProject).isNotNull
 
         ProjectPage.open(createdProject.id!!).title.shouldHave(Condition.exactText(testData.project.name!!))
+
+        softy.assertThat(ProjectsPage.open().getProjects().any { project -> project.name.text() == testData.project.name }).isTrue
     }
 
     @Test
