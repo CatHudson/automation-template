@@ -68,12 +68,12 @@ class CheckedRequestBase<T : BaseModel>(
             .extract().`as`(endpoint.modelClass) as T
     }
 
-    override fun filter(filters: Map<String, String>): List<T> {
+    override fun filter(filters: Map<String, String>, listJsonPath: String): List<T> {
         return uncheckedRequestBase
             .filter(filters)
             .then()
             .assertThat()
             .statusCode(HttpStatus.SC_OK)
-            .extract().jsonPath().getList<T>("project")
+            .extract().jsonPath().getList<T>(listJsonPath)
     }
 }
