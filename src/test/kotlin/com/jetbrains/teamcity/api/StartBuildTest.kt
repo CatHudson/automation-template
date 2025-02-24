@@ -1,14 +1,14 @@
 package com.jetbrains.teamcity.api
 
 import com.github.tomakehurst.wiremock.client.WireMock.post
-import com.jetbrains.teamcity.common.WireMock
-import com.jetbrains.teamcity.enums.Endpoint
-import com.jetbrains.teamcity.generators.TestDataGenerator
-import com.jetbrains.teamcity.models.BuildRun
-import com.jetbrains.teamcity.models.Step
-import com.jetbrains.teamcity.models.Steps
-import com.jetbrains.teamcity.requests.checked.CheckedRequests
-import com.jetbrains.teamcity.spec.Specification
+import com.jetbrains.teamcity.api.common.WireMock
+import com.jetbrains.teamcity.api.enums.Endpoint
+import com.jetbrains.teamcity.api.generators.TestDataGenerator
+import com.jetbrains.teamcity.api.models.BuildRun
+import com.jetbrains.teamcity.api.models.Step
+import com.jetbrains.teamcity.api.models.Steps
+import com.jetbrains.teamcity.api.requests.checked.CheckedRequests
+import com.jetbrains.teamcity.api.spec.Specification
 import io.qameta.allure.Feature
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay

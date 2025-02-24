@@ -1,16 +1,16 @@
 package com.jetbrains.teamcity.api
 
-import com.jetbrains.teamcity.enums.Endpoint
-import com.jetbrains.teamcity.generators.RandomData
-import com.jetbrains.teamcity.generators.TestDataGenerator
-import com.jetbrains.teamcity.models.Locator
-import com.jetbrains.teamcity.models.Project
-import com.jetbrains.teamcity.models.Role
-import com.jetbrains.teamcity.models.Roles
-import com.jetbrains.teamcity.models.User
-import com.jetbrains.teamcity.requests.unchecked.UncheckedRequests
-import com.jetbrains.teamcity.spec.ResponseValidationSpecifications
-import com.jetbrains.teamcity.spec.Specification
+import com.jetbrains.teamcity.api.enums.Endpoint
+import com.jetbrains.teamcity.api.generators.RandomData
+import com.jetbrains.teamcity.api.generators.TestDataGenerator
+import com.jetbrains.teamcity.api.models.Locator
+import com.jetbrains.teamcity.api.models.Project
+import com.jetbrains.teamcity.api.models.Role
+import com.jetbrains.teamcity.api.models.Roles
+import com.jetbrains.teamcity.api.models.User
+import com.jetbrains.teamcity.api.requests.unchecked.UncheckedRequests
+import com.jetbrains.teamcity.api.spec.ResponseValidationSpecifications
+import com.jetbrains.teamcity.api.spec.Specification
 import org.apache.http.HttpStatus
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.Tag

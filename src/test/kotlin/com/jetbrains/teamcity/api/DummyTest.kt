@@ -1,6 +1,6 @@
 package com.jetbrains.teamcity.api
 
-import com.jetbrains.teamcity.spec.Specification
+import com.jetbrains.teamcity.api.spec.Specification
 import io.restassured.RestAssured.given
 import org.apache.http.HttpStatus
 import org.junit.jupiter.api.Test
