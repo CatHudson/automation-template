@@ -60,7 +60,7 @@ class StartBuildTest: BaseApiTest() {
         val buildTypeWithStep = testData.buildType.copy(steps = Steps(1, listOf(Step.printHelloWorldStep)))
         val buildRun = TestDataGenerator.generate(listOf(buildTypeWithStep), BuildRun::class.java)
 
-        superUserCheckedRequests.getRequest(Endpoint.PROJECTS).create(testData.project)
+        superUserCheckedRequests.getRequest(Endpoint.PROJECTS).create(buildTypeWithStep.project!!)
         superUserCheckedRequests.getRequest(Endpoint.BUILD_TYPES).create(buildTypeWithStep)
         val createdBuildRun = superUserCheckedRequests.getRequest(Endpoint.BUILD_QUEUE).create(buildRun) as BuildRun
 
