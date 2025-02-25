@@ -12,7 +12,7 @@ class CheckedRequests(
 
     init {
         Endpoint.entries.forEach { endpoint ->
-            requests[endpoint] = CheckedRequestBase(specification, endpoint)
+            requests[endpoint] = CheckedRequestBase.create(specification, endpoint)
         }
     }
 

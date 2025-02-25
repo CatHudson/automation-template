@@ -10,9 +10,14 @@ class ProjectsPage: BasePage() {
 
     private val projectElements = `$$`("div[class*='Subproject__container']")
     private val header = `$`(".MainPanel__router--gF > div")
+    private val searchProjectInput = `$`("#search-projects")
 
     init {
         header.shouldBe(visible, BASE_WAITING)
+    }
+
+    fun searchProjectByName(projectName: String) {
+        searchProjectInput.`val`(projectName).pressEnter().pressEnter()
     }
 
     fun getProjects(): List<ProjectElement> {
