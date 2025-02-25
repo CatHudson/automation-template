@@ -9,7 +9,7 @@ import com.jetbrains.teamcity.ui.elements.BuildTypeElement
 class ProjectPage : BasePage() {
 
     val title = `$`("span[class*='ProjectPageHeader__title']")
-    private val buildTypes = `$$`("div[class*='BuildTypes__list'] div[class*='BuildTypes__item']")
+    private val buildTypes = `$$`("div[class*='buildType']")
 
     init {
         title.shouldBe(visible, BASE_WAITING)
