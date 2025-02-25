@@ -9,6 +9,7 @@ abstract class CreateBasePage: BasePage() {
 
     protected val buildNameInput = `$`("#buildTypeName")
     protected val connectionSuccessfulIndicator = `$`(".connectionSuccessful")
+    protected val proceedButtonStepTwo = `$`(byName("createProject"))
 
     companion object {
         protected const val CREATE_URL = "/admin/createObjectMenu.html?projectId=%s&showMode=%s"
@@ -16,12 +17,12 @@ abstract class CreateBasePage: BasePage() {
         private val urlInput = `$`("#url")
         private val usernameInput = `$`("#username")
         private val passwordInput = `$`("#password")
-        private val proceedButton = `$`(byName("createProjectFromUrl"))
+        private val baseProceedButton = `$`(byName("createProjectFromUrl"))
     }
 
-    fun baseCreateForm(repoUrl: String) {
+    protected fun baseCreateForm(repoUrl: String) {
         urlInput.`val`(repoUrl)
-        proceedButton.click()
+        baseProceedButton.click()
         connectionSuccessfulIndicator.shouldBe(visible, BASE_WAITING)
     }
 }

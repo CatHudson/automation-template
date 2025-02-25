@@ -12,7 +12,6 @@ class CreateProjectPage : CreateBasePage() {
 
         private val projectNameInput = `$`("#projectName")
         private val branchInput = `$`("#branch")
-        private val proceedButton = `$`(byName("createProject"))
 
         fun open(projectId: String): CreateProjectPage {
             return Selenide.open(
@@ -30,6 +29,6 @@ class CreateProjectPage : CreateBasePage() {
     fun setupProject(projectName: String, buildName: String) {
         projectNameInput.`val`(projectName)
         buildNameInput.`val`(buildName)
-        proceedButton.click()
+        proceedButtonStepTwo.click()
     }
 }

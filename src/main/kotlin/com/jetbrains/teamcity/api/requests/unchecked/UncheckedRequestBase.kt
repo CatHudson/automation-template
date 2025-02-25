@@ -9,10 +9,10 @@ import io.restassured.RestAssured
 import io.restassured.response.Response
 import io.restassured.specification.RequestSpecification
 
-class UncheckedRequestBase(
+class UncheckedRequestBase private constructor(
     private val spec: RequestSpecification,
-    private val endpoint: Endpoint
-): Request(spec, endpoint), CRUDInterface, SearchInterface {
+    private val endpoint: Endpoint,
+) : Request(spec, endpoint), CRUDInterface, SearchInterface {
 
     override fun create(model: BaseModel): Response {
         return RestAssured
@@ -46,7 +46,7 @@ class UncheckedRequestBase(
             .spec(spec)
             .delete("${endpoint.url}/id:$id")
     }
-    
+
     override fun search(query: String): Response {
         return RestAssured
             .given()
@@ -63,5 +63,11 @@ class UncheckedRequestBase(
                 }
             }
             .get(endpoint.url)
+    }
+
+    internal companion object {
+        internal fun create(spec: RequestSpecification, endpoint: Endpoint): UncheckedRequestBase {
+            return UncheckedRequestBase(spec, endpoint)
+        }
     }
 }

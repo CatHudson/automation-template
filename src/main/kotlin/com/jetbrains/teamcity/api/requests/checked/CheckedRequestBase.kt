@@ -11,12 +11,12 @@ import io.restassured.specification.RequestSpecification
 import org.apache.http.HttpStatus
 
 @Suppress("unchecked_cast")
-class CheckedRequestBase<T : BaseModel>(
+class CheckedRequestBase<T : BaseModel> private constructor(
     private val spec: RequestSpecification,
     private val endpoint: Endpoint,
 ) : Request(spec, endpoint), CRUDInterface, SearchInterface {
 
-    private val uncheckedRequestBase = UncheckedRequestBase(spec, endpoint)
+    private val uncheckedRequestBase = UncheckedRequestBase.create(spec, endpoint)
 
     override fun create(model: BaseModel): T {
         val createdModel = uncheckedRequestBase
@@ -75,5 +75,11 @@ class CheckedRequestBase<T : BaseModel>(
             .assertThat()
             .statusCode(HttpStatus.SC_OK)
             .extract().jsonPath().getList<T>(listJsonPath)
+    }
+
+    internal companion object {
+        internal fun <T : BaseModel> create(spec: RequestSpecification, endpoint: Endpoint): CheckedRequestBase<T> {
+            return CheckedRequestBase(spec, endpoint)
+        }
     }
 }
