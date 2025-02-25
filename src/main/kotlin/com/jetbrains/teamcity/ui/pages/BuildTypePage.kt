@@ -18,7 +18,7 @@ class BuildTypePage : BasePage() {
     }
 
     init {
-        title.shouldBe(visible)
+        title.shouldBe(visible, BASE_WAITING)
     }
 
     companion object {
