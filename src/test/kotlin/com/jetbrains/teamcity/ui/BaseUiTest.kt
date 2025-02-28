@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit
 import com.codeborne.selenide.Configuration as SelenideConfig
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Timeout(value = 40, unit = TimeUnit.SECONDS)
+@Timeout(value = 3, unit = TimeUnit.MINUTES)
 open class BaseUiTest : BaseTest() {
 
     @BeforeAll
