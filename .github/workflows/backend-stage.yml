@@ -1,0 +1,17 @@
+name: Backend deployment
+
+on: workflow_call
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build backend
+        run: echo "Building backend, running tests and publishing a new Docker image"
+
+  deploy-stage:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy backend to stage / review app
+        run: echo "Deploying backend"
