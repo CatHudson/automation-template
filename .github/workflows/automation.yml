@@ -19,7 +19,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: '21'
-          java-version: 'openjdk'
+          java-version: 'zulu'
 
       - name: Validate checkstyle with Detekt
         run: ./gradlew detekt
