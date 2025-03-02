@@ -26,8 +26,17 @@ dependencies {
     testImplementation(libs.assertJ)
 }
 
-tasks.test {
-    useJUnitPlatform()
+tasks {
+    test {
+        useJUnitPlatform {
+            excludeTags("Setup")
+        }
+    }
+    register<Test>("setupTest") {
+        useJUnitPlatform {
+            includeTags("Setup")
+        }
+    }
 }
 kotlin {
     jvmToolchain(21)
