@@ -23,7 +23,7 @@ runs:
     - name: Set up host config property
       shell: bash
       run: |
-        sed -i 's/^host=.*/host=$HOST/' src/main/resources/configuration.properties
+        sed -i "s/^host=.*/host=$HOST/" src/main/resources/configuration.properties
 #        echo "host=$HOST:8111" >> src/main/resources/configuration.properties
 
     - name: Pull Selenoid browsers
@@ -74,5 +74,5 @@ runs:
     - name: Set up superUserToken config property
       shell: bash
       run: |
-        sed -i 's/^super-user-token=.*/super-user-token=$SUPER_USER_TOKEN/' src/main/resources/configuration.properties
+        sed -i "s/^super-user-token=.*/super-user-token=$SUPER_USER_TOKEN/" src/main/resources/configuration.properties
 #        echo "superUserToken=$SUPER_USER_TOKEN" >> src/main/resources/configuration.properties
