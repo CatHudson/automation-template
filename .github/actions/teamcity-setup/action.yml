@@ -17,7 +17,7 @@ runs:
       shell: bash
       run: |
         echo "HOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)" >> $GITHUB_ENV
-        sed -i 's/^superUserToken=.*/superUserToken=$SUPER_USER_TOKEN/' src/main/resources/config.properties
+        sed -i 's/^superUserToken=.*/superUserToken=$SUPER_USER_TOKEN/' src/main/resources/configuration.properties
 #        echo "host=$HOST:8111" >> src/main/resources/configuration.properties
 
 #    - name: Set up host config property
@@ -66,9 +66,9 @@ runs:
       shell: bash
       run: |
         echo "SUPER_USER_TOKEN=$(docker logs teamcity-server | grep 'Super user authentication token' | tail -n 1 | awk '{print $6}')" >> $GITHUB_ENV
-        sed -i 's/^superUserToken=.*/superUserToken=$SUPER_USER_TOKEN/' src/main/resources/config.properties
-#        echo "superUserToken=$SUPER_USER_TOKEN" >> src/main/resources/config.properties
+        sed -i 's/^superUserToken=.*/superUserToken=$SUPER_USER_TOKEN/' src/main/resources/configuration.properties
+#        echo "superUserToken=$SUPER_USER_TOKEN" >> src/main/resources/configuration.properties
 
 #    - name: Set up superUserToken config property
 #      shell: bash
-#      run: echo "superUserToken=$SUPER_USER_TOKEN" >> src/main/resources/config.properties
+#      run: echo "superUserToken=$SUPER_USER_TOKEN" >> src/main/resources/configuration.properties
