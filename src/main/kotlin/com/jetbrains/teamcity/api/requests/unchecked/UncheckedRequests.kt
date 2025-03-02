@@ -5,7 +5,7 @@ import io.restassured.specification.RequestSpecification
 import java.util.*
 
 class UncheckedRequests(
-    private val specification: RequestSpecification,
+    private val specification: RequestSpecification
 ) {
     private val requests: EnumMap<Endpoint, UncheckedRequestBase> = EnumMap(Endpoint::class.java)
 

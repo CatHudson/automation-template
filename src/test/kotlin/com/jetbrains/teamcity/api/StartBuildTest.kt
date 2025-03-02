@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 
 @Feature("Start build")
-class StartBuildTest: BaseApiTest() {
+class StartBuildTest : BaseApiTest() {
 
     @BeforeEach
     fun `setup Wiremock server`() {
@@ -41,7 +41,7 @@ class StartBuildTest: BaseApiTest() {
         WireMock.stopServer()
     }
 
-    //Advanced homework ↓↓↓
+    // Advanced homework ↓↓↓
 
     @Test
     fun `a user creates a successful build, mocked test`() {
@@ -87,8 +87,9 @@ class StartBuildTest: BaseApiTest() {
             }
         }
 
-        if (attempts >= maxAttempts)
+        if (attempts >= maxAttempts) {
             throw AssertionError("The build configuration has exceeded $maxAttempts attempts")
+        }
 
         return result!!
     }

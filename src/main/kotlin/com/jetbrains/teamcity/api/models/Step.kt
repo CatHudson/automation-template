@@ -7,8 +7,8 @@ data class Step(
     val id: String = "",
     val name: String = "name",
     val type: String = "simpleRunner",
-    val properties: Properties = Properties(),
-): BaseModel() {
+    val properties: Properties = Properties()
+) : BaseModel() {
     companion object {
 
         val printHelloWorldStep: Step by lazy {

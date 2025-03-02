@@ -6,7 +6,7 @@ import com.codeborne.selenide.Selenide.`$`
 import com.codeborne.selenide.Selenide.`$$`
 import com.jetbrains.teamcity.ui.elements.ProjectElement
 
-class ProjectsPage: BasePage() {
+class ProjectsPage : BasePage() {
 
     private val projectElements = `$$`("div[class*='Subproject__container']")
     private val header = `$`(".MainPanel__router--gF > div")

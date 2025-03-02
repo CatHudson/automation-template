@@ -5,7 +5,7 @@ import com.codeborne.selenide.Selectors.byName
 import com.codeborne.selenide.Selenide.`$`
 import com.jetbrains.teamcity.ui.pages.BasePage
 
-abstract class CreateBasePage: BasePage() {
+abstract class CreateBasePage : BasePage() {
 
     protected val buildNameInput = `$`("#buildTypeName")
     protected val connectionSuccessfulIndicator = `$`(".connectionSuccessful")

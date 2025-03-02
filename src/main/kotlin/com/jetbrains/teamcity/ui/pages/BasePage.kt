@@ -12,11 +12,12 @@ abstract class BasePage {
     companion object {
         @JvmStatic
         protected val BASE_WAITING = 30.seconds.toJavaDuration()
+
         @JvmStatic
         protected val LONG_WAITING = 3.minutes.toJavaDuration()
     }
 
-    protected fun <T: BasePageElement> generatePageElements(
+    protected fun <T : BasePageElement> generatePageElements(
         collection: ElementsCollection,
         creator: (SelenideElement) -> T
     ): List<T> {

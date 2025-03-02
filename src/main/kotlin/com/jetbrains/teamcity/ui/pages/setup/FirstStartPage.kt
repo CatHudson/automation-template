@@ -8,6 +8,10 @@ import com.jetbrains.teamcity.ui.pages.BasePage
 
 class FirstStartPage : BasePage() {
 
+    init {
+        restoreButton.shouldBe(visible, LONG_WAITING)
+    }
+
     fun setFirstStart(): FirstStartPage {
         proceedButton.click()
         dbTypeSelector.shouldBe(visible, LONG_WAITING)
@@ -27,7 +31,6 @@ class FirstStartPage : BasePage() {
 
         fun open(): FirstStartPage {
             return Selenide.open("/", FirstStartPage::class.java)
-            restoreButton.shouldBe(visible, LONG_WAITING)
         }
     }
 }

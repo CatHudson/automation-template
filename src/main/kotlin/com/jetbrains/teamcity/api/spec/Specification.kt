@@ -43,7 +43,7 @@ object Specification {
 
     fun superUserSpec(): RequestSpecification {
         val basicAuthScheme = BasicAuthScheme()
-        basicAuthScheme.userName = "" //empty username is required for a superuser auth
+        basicAuthScheme.userName = "" // empty username is required for a superuser auth
         basicAuthScheme.password = Configuration.getProperty("super-user-token").toString()
         return reqBuilder()
             .setAuth(basicAuthScheme)

@@ -1,6 +1,5 @@
 package com.jetbrains.teamcity.ui.pages.admin
 
-import com.codeborne.selenide.Selectors.byName
 import com.codeborne.selenide.Selenide
 import com.codeborne.selenide.Selenide.`$`
 

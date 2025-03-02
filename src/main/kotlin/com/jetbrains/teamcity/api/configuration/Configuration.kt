@@ -21,9 +21,9 @@ object Configuration {
         try {
             properties.load(this::class.java.classLoader.getResourceAsStream(CONFIG_FILE))
         } catch (e: FileNotFoundException) {
-            println("File not found: $CONFIG_FILE; ${e.printStackTrace()}")
+            println("File not found: $CONFIG_FILE; ${e.message}")
         } catch (e: IOException) {
-            println("Error while reading properties file: $CONFIG_FILE; ${e.printStackTrace()}")
+            println("Error while reading properties file: $CONFIG_FILE; ${e.message}")
         }
     }
 }

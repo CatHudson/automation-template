@@ -6,7 +6,7 @@ import com.jetbrains.teamcity.ui.pages.ProjectPage
 import com.jetbrains.teamcity.ui.pages.ProjectsPage
 import org.junit.jupiter.api.Test
 
-class FindProjectByNameTest: BaseUiTest() {
+class FindProjectByNameTest : BaseUiTest() {
 
     @Test
     fun `a user should be able to find a project by name`() {

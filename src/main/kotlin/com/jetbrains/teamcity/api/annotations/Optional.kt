@@ -5,4 +5,4 @@ package com.jetbrains.teamcity.api.annotations
 /**
  * Fields will be empty by default but may be set manually
  */
-annotation class Optional()
+annotation class Optional

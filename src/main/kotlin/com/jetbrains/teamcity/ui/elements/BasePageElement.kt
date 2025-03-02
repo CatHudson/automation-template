@@ -2,12 +2,12 @@ package com.jetbrains.teamcity.ui.elements
 
 import com.codeborne.selenide.ElementsCollection
 import com.codeborne.selenide.SelenideElement
-import org.openqa.selenium.By
 import com.jetbrains.teamcity.ui.pages.BasePage
+import org.openqa.selenium.By
 
 abstract class BasePageElement(
     open val element: SelenideElement
-): BasePage() {
+) : BasePage() {
 
     protected fun find(by: By): SelenideElement {
         return element.`$`(by)

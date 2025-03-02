@@ -5,4 +5,4 @@ package com.jetbrains.teamcity.api.annotations
 /**
  * Fields will be set with a random value
  */
-annotation class Random()
+annotation class Random

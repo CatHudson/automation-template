@@ -13,7 +13,7 @@ import org.apache.http.HttpStatus
 @Suppress("unchecked_cast")
 class CheckedRequestBase<T : BaseModel> private constructor(
     private val spec: RequestSpecification,
-    private val endpoint: Endpoint,
+    private val endpoint: Endpoint
 ) : Request(spec, endpoint), CRUDInterface, SearchInterface {
 
     private val uncheckedRequestBase = UncheckedRequestBase.create(spec, endpoint)
