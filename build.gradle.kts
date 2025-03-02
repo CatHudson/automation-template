@@ -1,5 +1,7 @@
 plugins {
-    kotlin("jvm") version "2.1.0"
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.detekt)
+    alias(libs.plugins.ktlint)
 }
 
 group = "homework"
@@ -10,6 +12,7 @@ repositories {
 }
 
 dependencies {
+    detektPlugins(libs.detektFormatting)
     implementation(libs.selenide)
     implementation(libs.restAssured)
     implementation(libs.allure)
@@ -28,4 +31,12 @@ tasks.test {
 }
 kotlin {
     jvmToolchain(21)
+}
+
+ktlint {
+    reporters {
+        reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.PLAIN)
+        reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.CHECKSTYLE)
+        reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.HTML)
+    }
 }

@@ -35,7 +35,7 @@ object TestDataGenerator {
     fun <T : BaseModel> generate(
         generatedModels: List<BaseModel>,
         generatorClass: Class<T>,
-        vararg parameters: Any,
+        vararg parameters: Any
     ): T {
         try {
             val instance = generatorClass.getDeclaredConstructor().newInstance()
@@ -48,7 +48,6 @@ object TestDataGenerator {
                     val generatedClass = generatedModels.find { it.javaClass == field.type }
 
                     when {
-
                         field.isAnnotationPresent(Parameterizable::class.java) && params.isNotEmpty() -> {
                             field.set(instance, params[0])
                             params = params.copyOfRange(1, params.size)
@@ -70,28 +69,30 @@ object TestDataGenerator {
                                 generatedClass ?: generate(
                                     generatedModels,
                                     field.type.asSubclass(BaseModel::class.java),
-                                    *finalParams
+                                    finalParams
                                 )
                             )
                         }
 
                         List::class.java.isAssignableFrom(field.type) && field.genericType is ParameterizedType -> {
                             val typeClass = (field.genericType as ParameterizedType).actualTypeArguments[0] as Class<*>
-                            if (BaseModel::class.java.isAssignableFrom(typeClass)) {
-                                val finalParams = params
-                                field.set(
-                                    instance,
-                                    generatedClass?.let { mutableListOf(it) }
-                                        ?: mutableListOf(
-                                            generate(
-                                                generatedModels,
-                                                typeClass.asSubclass(BaseModel::class.java),
-                                                *finalParams
-                                            )
+
+                            require(BaseModel::class.java.isAssignableFrom(typeClass)) {
+                                "Cannot generate a List of ${typeClass.typeName} as it is not a ${BaseModel::class.java.typeName} child"
+                            }
+
+                            val finalParams = params
+                            field.set(
+                                instance,
+                                generatedClass?.let { mutableListOf(it) }
+                                    ?: mutableListOf(
+                                        generate(
+                                            generatedModels,
+                                            typeClass.asSubclass(BaseModel::class.java),
+                                            finalParams
                                         )
-                                )
-                            } else
-                                throw IllegalArgumentException("Cannot generate a List of ${typeClass.typeName} as it is not a ${BaseModel::class.java.typeName} child")
+                                    )
+                            )
                         }
 
 //                        !BaseModel::class.java.isAssignableFrom(field.type) -> {
@@ -104,7 +105,7 @@ object TestDataGenerator {
             }
             return instance
         } catch (e: Exception) {
-            throw IllegalStateException("Cannot generate test data", e)
+            throw IllegalStateException("Cannot generate test data", e.cause)
         }
     }
 
@@ -134,7 +135,7 @@ object TestDataGenerator {
             }
             return instance
         } catch (e: Exception) {
-            throw IllegalStateException("Cannot generate test data", e)
+            throw IllegalStateException("Cannot generate test data", e.cause)
         }
     }
 }

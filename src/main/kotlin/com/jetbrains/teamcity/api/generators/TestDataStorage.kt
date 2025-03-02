@@ -37,7 +37,7 @@ object TestDataStorage {
                 it.get(model)?.toString()
             }!!
         } catch (e: Exception) {
-            throw IllegalStateException("Cannot get id or locator of entity", e)
+            throw IllegalStateException("Cannot get id or locator of entity", e.cause)
         }
     }
 }

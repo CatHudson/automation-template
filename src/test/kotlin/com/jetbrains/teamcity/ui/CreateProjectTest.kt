@@ -32,7 +32,8 @@ class CreateProjectTest : BaseUiTest() {
         ProjectPage.open(createdProject.id!!).title.shouldHave(exactText(testData.project.name!!))
 
         softy.assertThat(
-            ProjectsPage.open().getProjects().any { project -> project.name.text() == testData.project.name }).isTrue
+            ProjectsPage.open().getProjects().any { project -> project.name.text() == testData.project.name }
+        ).isTrue
     }
 
     @Test

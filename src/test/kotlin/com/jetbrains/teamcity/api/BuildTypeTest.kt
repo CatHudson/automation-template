@@ -29,7 +29,9 @@ class BuildTypeTest : BaseApiTest() {
         userCheckedRequester.getRequest(Endpoint.PROJECTS).create(testData.project)
         userCheckedRequester.getRequest(Endpoint.BUILD_TYPES).create(testData.buildType)
 
-        val createdBuildType = userCheckedRequester.getRequest<BuildType>(Endpoint.BUILD_TYPES).read(testData.buildType.id!!)
+        val createdBuildType = userCheckedRequester.getRequest<BuildType>(
+            Endpoint.BUILD_TYPES
+        ).read(testData.buildType.id!!)
 
         softy.assertThat(createdBuildType).isEqualTo(testData.buildType)
     }
@@ -41,7 +43,11 @@ class BuildTypeTest : BaseApiTest() {
         superUserCheckedRequests.getRequest(Endpoint.USERS).create(testData.user)
 
         val userCheckedRequester = CheckedRequests(Specification.authSpec(testData.user))
-        val duplicatedBuildType = TestDataGenerator.generate(listOf(testData.project), BuildType::class.java, testData.buildType.id!!)
+        val duplicatedBuildType = TestDataGenerator.generate(
+            listOf(testData.project),
+            BuildType::class.java,
+            testData.buildType.id!!
+        )
 
         userCheckedRequester.getRequest(Endpoint.PROJECTS).create(testData.project)
         userCheckedRequester.getRequest(Endpoint.BUILD_TYPES).create(testData.buildType)
@@ -52,7 +58,11 @@ class BuildTypeTest : BaseApiTest() {
             .then()
             .assertThat()
             .statusCode(HttpStatus.SC_BAD_REQUEST)
-            .body(Matchers.containsString("The build configuration / template ID \"${duplicatedBuildType.id}\" is already used by another configuration or template"))
+            .body(
+                Matchers.containsString(
+                    "The build configuration / template ID \"${duplicatedBuildType.id}\" is already used by another configuration or template"
+                )
+            )
     }
 
     @Test
@@ -66,7 +76,9 @@ class BuildTypeTest : BaseApiTest() {
         superUserCheckedRequests.getRequest(Endpoint.USERS).create(projectAdminUser)
         projectAdminCheckedRequester.getRequest(Endpoint.BUILD_TYPES).create(testData.buildType)
 
-        val createdBuildType = projectAdminCheckedRequester.getRequest<BuildType>(Endpoint.BUILD_TYPES).read(testData.buildType.id!!)
+        val createdBuildType = projectAdminCheckedRequester.getRequest<BuildType>(
+            Endpoint.BUILD_TYPES
+        ).read(testData.buildType.id!!)
 
         softy.assertThat(createdBuildType.name).isEqualTo(testData.buildType.name)
     }

@@ -4,7 +4,7 @@ import com.codeborne.selenide.Selenide
 import com.codeborne.selenide.Selenide.`$`
 import com.jetbrains.teamcity.api.models.User
 
-class LoginPage: BasePage() {
+class LoginPage : BasePage() {
 
     companion object {
 

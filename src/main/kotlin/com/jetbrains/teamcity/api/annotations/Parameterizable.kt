@@ -5,4 +5,4 @@ package com.jetbrains.teamcity.api.annotations
 /**
  * Fields will contain the passed value
  */
-annotation class Parameterizable()
+annotation class Parameterizable

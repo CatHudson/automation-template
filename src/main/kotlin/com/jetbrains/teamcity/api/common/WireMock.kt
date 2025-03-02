@@ -12,9 +12,10 @@ object WireMock {
 
     private var wireMockServer: WireMockServer? = null
     private val mapper = ObjectMapper()
+    private const val PORT = 8081
 
     fun setupServer(mappingBuilder: MappingBuilder, status: Int, model: BaseModel) {
-        wireMockServer ?: WireMockServer(8081).also {
+        wireMockServer ?: WireMockServer(PORT).also {
             wireMockServer = it
             wireMockServer!!.start()
         }

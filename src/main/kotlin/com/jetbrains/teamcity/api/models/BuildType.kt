@@ -15,5 +15,5 @@ data class BuildType(
     @Parameterizable
     val project: Project? = null,
     @Optional
-    val steps: Steps? = Steps(),
-): BaseModel()
+    val steps: Steps? = Steps()
+) : BaseModel()
