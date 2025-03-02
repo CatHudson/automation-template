@@ -59,7 +59,7 @@ runs:
 
     - name: Set up TeamCity server
       shell: bash
-      run: ./gradlew clean setupTest
+      run: ./gradlew clean setupTest --info
 
     - name: Parse superuser token as env variable and add it into configuration.properties
       shell: bash
