@@ -1,0 +1,42 @@
+name: Run tests
+
+on:
+  workflow_call:
+    inputs:
+      package:
+        description: api | ui
+        required: true
+        type: string
+
+jobs:
+  validate-checkstyle:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: '21'
+          java-version: 'openjdk'
+
+      - name: Validate checkstyle with Detekt
+        run: ./gradlew detekt
+
+      - name: Validate checkstyle with Ktlint
+        run: ./gradlew ktlintCheck
+
+  run-tests:
+    needs: validate-checkstyle
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: TeamCity setup
+        uses: ./.github/actions/teamcity-setup
+
+      - name: Run API-tests
+        continue-on-error: true
+        run: ./gradlew test --tests "com.jetbrains.teamcity.${{ inputs.package }}.**" --filter "Regression"
