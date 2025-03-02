@@ -18,8 +18,8 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          distribution: 21
-          java-version: 'zulu'
+          distribution: 'zulu'
+          java-version: 21
 
       - name: Validate checkstyle with Detekt
         run: ./gradlew detekt
