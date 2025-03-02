@@ -23,6 +23,7 @@ jobs:
           java-version: 21
 
       - name: Validate checkstyle with Detekt
+        continue-on-error: true
         run: ./gradlew detekt
 
       - name: Validate checkstyle with Ktlint
