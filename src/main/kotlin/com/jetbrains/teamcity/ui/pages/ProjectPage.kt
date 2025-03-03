@@ -5,6 +5,7 @@ import com.codeborne.selenide.Selenide
 import com.codeborne.selenide.Selenide.`$`
 import com.codeborne.selenide.Selenide.`$$`
 import com.jetbrains.teamcity.ui.elements.BuildTypeElement
+import io.qameta.allure.Step
 
 class ProjectPage : BasePage() {
 
@@ -15,6 +16,7 @@ class ProjectPage : BasePage() {
         title.shouldBe(visible, BASE_WAITING)
     }
 
+    @Step("Get a list of build types")
     fun getBuildTypes(): List<BuildTypeElement> {
         return generatePageElements(buildTypes) {
             BuildTypeElement(it)
@@ -25,6 +27,7 @@ class ProjectPage : BasePage() {
 
         private const val PROJECT_URL = "/project/%s"
 
+        @Step("Open project {projectId} page")
         fun open(projectId: String): ProjectPage {
             return Selenide.open(
                 PROJECT_URL.format(projectId),
