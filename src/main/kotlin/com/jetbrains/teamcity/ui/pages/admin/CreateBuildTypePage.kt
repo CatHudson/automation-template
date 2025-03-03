@@ -2,6 +2,7 @@ package com.jetbrains.teamcity.ui.pages.admin
 
 import com.codeborne.selenide.Selenide
 import com.codeborne.selenide.Selenide.`$`
+import io.qameta.allure.Step
 
 class CreateBuildTypePage : CreateBasePage() {
 
@@ -9,6 +10,7 @@ class CreateBuildTypePage : CreateBasePage() {
 
         private const val BUILD_TYPE_SHOW_MODE = "createBuildTypeMenu"
 
+        @Step("Open CreateBuildType page")
         fun open(projectId: String): CreateBuildTypePage {
             return Selenide.open(
                 CREATE_URL.format(projectId, BUILD_TYPE_SHOW_MODE),
@@ -24,6 +26,7 @@ class CreateBuildTypePage : CreateBasePage() {
         return this
     }
 
+    @Step("Set up build type info")
     fun setupBuildType(buildName: String) {
         buildNameInput.`val`(buildName)
         proceedButtonStepTwo.click()

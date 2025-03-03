@@ -4,6 +4,7 @@ import com.codeborne.selenide.Condition.visible
 import com.codeborne.selenide.Selectors.byName
 import com.codeborne.selenide.Selenide.`$`
 import com.jetbrains.teamcity.ui.pages.BasePage
+import io.qameta.allure.Step
 
 abstract class CreateBasePage : BasePage() {
 
@@ -20,6 +21,7 @@ abstract class CreateBasePage : BasePage() {
         private val baseProceedButton = `$`(byName("createProjectFromUrl"))
     }
 
+    @Step("Fill base createForm")
     protected fun baseCreateForm(repoUrl: String) {
         urlInput.`val`(repoUrl)
         baseProceedButton.click()
