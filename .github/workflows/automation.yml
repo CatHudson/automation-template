@@ -40,7 +40,7 @@ jobs:
         uses: ./.github/actions/teamcity-setup
 
       - name: Run tests
-        run: ./gradlew test-regression --tests "com.jetbrains.teamcity.${{ inputs.package }}.**" --info
+        run: ./gradlew test-regression --tests "com.jetbrains.teamcity.${{ inputs.package }}.**"
 
       - name: Run Swagger Coverage
         if: always() && inputs.package == 'api'
