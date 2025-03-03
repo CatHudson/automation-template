@@ -35,7 +35,7 @@ object TestDataGenerator {
     fun <T : BaseModel> generate(
         generatedModels: List<BaseModel>,
         generatorClass: Class<T>,
-        vararg parameters: Any,
+        vararg parameters: Any
     ): T {
         try {
             val instance = generatorClass.getDeclaredConstructor().newInstance()
@@ -48,7 +48,6 @@ object TestDataGenerator {
                     val generatedClass = generatedModels.find { it.javaClass == field.type }
 
                     when {
-
                         field.isAnnotationPresent(Parameterizable::class.java) && params.isNotEmpty() -> {
                             field.set(instance, params[0])
                             params = params.copyOfRange(1, params.size)
@@ -90,8 +89,9 @@ object TestDataGenerator {
                                             )
                                         )
                                 )
-                            } else
+                            } else {
                                 throw IllegalArgumentException("Cannot generate a List of ${typeClass.typeName} as it is not a ${BaseModel::class.java.typeName} child")
+                            }
                         }
 
 //                        !BaseModel::class.java.isAssignableFrom(field.type) -> {
