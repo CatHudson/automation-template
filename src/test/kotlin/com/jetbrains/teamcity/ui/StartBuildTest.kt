@@ -6,8 +6,10 @@ import com.jetbrains.teamcity.api.models.Step
 import com.jetbrains.teamcity.api.models.Steps
 import com.jetbrains.teamcity.ui.pages.BuildTypePage
 import com.jetbrains.teamcity.ui.pages.ProjectPage
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 
+@Tag("Regression")
 class StartBuildTest : BaseUiTest() {
 
     @Test

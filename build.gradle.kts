@@ -19,6 +19,7 @@ dependencies {
     implementation(libs.jackson)
     implementation(libs.coroutines)
     implementation(libs.wiremock)
+    implementation(libs.swaggerCoverage)
 
     testImplementation(libs.junitApi)
     testRuntimeOnly(libs.junitEngine)

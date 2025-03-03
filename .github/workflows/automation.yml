@@ -41,3 +41,18 @@ jobs:
 
       - name: Run tests
         run: ./gradlew test-regression --tests "com.jetbrains.teamcity.${{ inputs.package }}.**" --info
+
+      - name: Run Swagger Coverage
+        if: inputs.package == 'api'
+        run: |
+          .swagger-coverage-commandline/bin/swagger-coverage-commandline -s http://$HOST:8111/app/rest/swagger.json -i build/swagger-coverage-output
+
+      - name: Save Swagger Coverage results
+        if: inputs.package == 'api'
+        uses: actions/upload-artifact@v4
+        with:
+          name: swagger-coverage
+          path: |
+            swagger-coverage-report.html
+            swagger-coverage-results.json
+

@@ -4,8 +4,10 @@ import com.codeborne.selenide.Condition
 import com.jetbrains.teamcity.api.enums.Endpoint
 import com.jetbrains.teamcity.ui.pages.ProjectPage
 import com.jetbrains.teamcity.ui.pages.ProjectsPage
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 
+@Tag("Regression")
 class FindProjectByNameTest : BaseUiTest() {
 
     @Test
