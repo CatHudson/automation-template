@@ -4,6 +4,8 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 /allure-results
+swagger-coverage-**
+index.html
 
 ### IntelliJ IDEA ###
 .idea/modules.xml

@@ -1,5 +1,7 @@
 package com.jetbrains.teamcity.api.spec
 
+import com.github.viclovsky.swagger.coverage.FileSystemOutputWriter
+import com.github.viclovsky.swagger.coverage.SwaggerCoverageRestAssured
 import com.jetbrains.teamcity.api.configuration.Configuration
 import com.jetbrains.teamcity.api.models.User
 import io.restassured.authentication.BasicAuthScheme
@@ -8,6 +10,7 @@ import io.restassured.filter.log.RequestLoggingFilter
 import io.restassured.filter.log.ResponseLoggingFilter
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
+import java.nio.file.Paths
 
 object Specification {
 
@@ -16,7 +19,15 @@ object Specification {
             .setContentType(ContentType.JSON)
             .setAccept(ContentType.JSON)
             .setBaseUri("http://${Configuration.getProperty("host")}:${Configuration.getProperty("port")}")
-            .addFilters(listOf(RequestLoggingFilter(), ResponseLoggingFilter()))
+            .addFilter(RequestLoggingFilter())
+            .addFilter(ResponseLoggingFilter())
+            .addFilter(
+                SwaggerCoverageRestAssured(
+                    FileSystemOutputWriter(
+                        Paths.get("build/" + com.github.viclovsky.swagger.coverage.SwaggerCoverageConstants.OUTPUT_DIRECTORY)
+                    )
+                )
+            )
     }
 
     fun unAuthSpec(): RequestSpecification {
