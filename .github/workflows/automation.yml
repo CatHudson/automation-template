@@ -40,4 +40,4 @@ jobs:
         uses: ./.github/actions/teamcity-setup
 
       - name: Run tests
-        run: ./gradlew test-regression --tests "com.jetbrains.teamcity.${{ inputs.package }}.**"
+        run: ./gradlew test-regression --tests "com.jetbrains.teamcity.${{ inputs.package }}.**" --info
