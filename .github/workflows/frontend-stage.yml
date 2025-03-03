@@ -6,7 +6,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Build backend
+      - name: Build frontend
         run: echo "Building frontend, running tests and publishing a new Docker image"
 
   deploy-stage:
