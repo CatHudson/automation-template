@@ -4,6 +4,7 @@ import com.codeborne.selenide.Condition.visible
 import com.codeborne.selenide.Selenide
 import com.codeborne.selenide.Selenide.`$`
 import com.jetbrains.teamcity.ui.elements.BuildRunHistoryElement
+import io.qameta.allure.Step
 
 class BuildTypePage : BasePage() {
 
@@ -12,6 +13,7 @@ class BuildTypePage : BasePage() {
     val buildsInQueueIndicator = buildRunHistoryBlock.find("button[class*='Builds'] span[class='ring-button-content']")
     val title = `$`("h1")
 
+    @Step("Get a list of build runs")
     fun getBuildRuns(): List<BuildRunHistoryElement> {
         buildRunHistoryBlock.shouldBe(visible)
         return generatePageElements(buildRunHistoryElements) {
@@ -28,6 +30,7 @@ class BuildTypePage : BasePage() {
         private const val BUILD_TYPE_BY_NAME_URL = "/buildConfiguration/%s_%s"
         private const val BUILD_TYPE_BY_ID_URL = "/buildConfiguration/%s"
 
+        @Step("Open BuildType page")
         fun open(projectId: String, buildTypeName: String): BuildTypePage {
             return Selenide.open(
                 BUILD_TYPE_BY_NAME_URL.format(
@@ -40,6 +43,7 @@ class BuildTypePage : BasePage() {
             )
         }
 
+        @Step("Open BuildType page")
         fun open(buildTypeId: String): BuildTypePage {
             return Selenide.open(
                 BUILD_TYPE_BY_ID_URL.format(buildTypeId),
