@@ -1,11 +1,13 @@
 package com.jetbrains.teamcity.ui
 
 import com.codeborne.selenide.Selenide
+import com.codeborne.selenide.logevents.SelenideLogger
 import com.jetbrains.teamcity.BaseTest
 import com.jetbrains.teamcity.api.configuration.Configuration
 import com.jetbrains.teamcity.api.enums.Endpoint
 import com.jetbrains.teamcity.api.models.User
 import com.jetbrains.teamcity.ui.pages.LoginPage
+import io.qameta.allure.selenide.AllureSelenide
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
@@ -33,6 +35,10 @@ open class BaseUiTest : BaseTest() {
                 "enableLog" to true
             )
         )
+        SelenideLogger.addListener("AllureSelenide", AllureSelenide()
+            .screenshots(true)
+            .savePageSource(true)
+            .includeSelenideSteps(true))
     }
 
     @AfterEach

@@ -4,6 +4,7 @@ import com.github.viclovsky.swagger.coverage.FileSystemOutputWriter
 import com.github.viclovsky.swagger.coverage.SwaggerCoverageRestAssured
 import com.jetbrains.teamcity.api.configuration.Configuration
 import com.jetbrains.teamcity.api.models.User
+import io.qameta.allure.restassured.AllureRestAssured
 import io.restassured.authentication.BasicAuthScheme
 import io.restassured.builder.RequestSpecBuilder
 import io.restassured.filter.log.RequestLoggingFilter
@@ -19,6 +20,7 @@ object Specification {
             .setContentType(ContentType.JSON)
             .setAccept(ContentType.JSON)
             .setBaseUri("http://${Configuration.getProperty("host")}:${Configuration.getProperty("port")}")
+            .addFilter(AllureRestAssured())
             .addFilter(RequestLoggingFilter())
             .addFilter(ResponseLoggingFilter())
             .addFilter(

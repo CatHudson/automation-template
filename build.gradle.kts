@@ -16,6 +16,8 @@ dependencies {
     implementation(libs.selenide)
     implementation(libs.restAssured)
     implementation(libs.allure)
+    implementation(libs.allureRestAssured)
+    implementation(libs.allureSelenide)
     implementation(libs.jackson)
     implementation(libs.coroutines)
     implementation(libs.wiremock)
