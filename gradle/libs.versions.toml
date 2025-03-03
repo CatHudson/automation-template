@@ -23,6 +23,8 @@ ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 selenide = { module = "com.codeborne:selenide", version.ref = "selenide" }
 restAssured = { module = "io.rest-assured:rest-assured", version.ref = "restAssured" }
 allure = { module = "io.qameta.allure:allure-junit5", version.ref = "allure" }
+allureRestAssured = { module = "io.qameta.allure:allure-rest-assured", version.ref = "allure" }
+allureSelenide = { module = "io.qameta.allure:allure-selenide", version.ref = "allure" }
 jackson = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
 coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinCoroutines" }
 wiremock = { module = "org.wiremock:wiremock", version.ref = "wiremock" }
