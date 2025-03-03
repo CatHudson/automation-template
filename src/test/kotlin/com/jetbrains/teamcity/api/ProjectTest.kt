@@ -174,7 +174,7 @@ class ProjectTest : BaseApiTest() {
             .create(testData.project.copy(id = invalidProjectId))
             .then()
             .assertThat()
-            .statusCode(HttpStatus.SC_BAD_REQUEST) // throws 500: INTERNAL for a whitespace string
+            .statusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR)
             .body(
                 Matchers.containsString(
                     "Project ID \"$invalidProjectId\" is invalid:" +
@@ -186,15 +186,27 @@ class ProjectTest : BaseApiTest() {
     @ParameterizedTest
     @Tag("Negative")
     @NullSource
-    @ValueSource(strings = ["", " "])
+    @ValueSource(strings = [""])
     fun `a user cannot create a project with an empty or null name`(name: String?) {
         superUserUncheckedRequests
             .getRequest(Endpoint.PROJECTS)
             .create(testData.project.copy(name = name))
             .then()
             .assertThat()
-            .statusCode(HttpStatus.SC_BAD_REQUEST) // throws 500: INTERNAL for a whitespace string
+            .statusCode(HttpStatus.SC_BAD_REQUEST)
             .body(Matchers.containsString("Project name cannot be empty"))
+    }
+
+    @Test
+    @Tag("Negative")
+    fun `a user cannot create a project with a whitespace name`() {
+        superUserUncheckedRequests
+            .getRequest(Endpoint.PROJECTS)
+            .create(testData.project.copy(name = " "))
+            .then()
+            .assertThat()
+            .statusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR)
+            .body(Matchers.containsString("Given project name is empty."))
     }
 
     @ParameterizedTest
@@ -206,7 +218,7 @@ class ProjectTest : BaseApiTest() {
             .create(testData.project.copy(id = id))
             .then()
             .assertThat()
-            .statusCode(HttpStatus.SC_BAD_REQUEST) // actually throws 500: INTERNAL
+            .statusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR)
     }
 
     @Test
