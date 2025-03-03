@@ -35,10 +35,13 @@ open class BaseUiTest : BaseTest() {
                 "enableLog" to true
             )
         )
-        SelenideLogger.addListener("AllureSelenide", AllureSelenide()
-            .screenshots(true)
-            .savePageSource(true)
-            .includeSelenideSteps(true))
+        SelenideLogger.addListener(
+            "AllureSelenide",
+            AllureSelenide()
+                .screenshots(true)
+                .savePageSource(true)
+                .includeSelenideSteps(true)
+        )
     }
 
     @AfterEach
