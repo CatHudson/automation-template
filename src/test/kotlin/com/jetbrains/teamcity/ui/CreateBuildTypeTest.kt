@@ -1,14 +1,15 @@
 package com.jetbrains.teamcity.ui
 
 import com.codeborne.selenide.Condition.exactText
-import com.codeborne.selenide.Condition.visible
 import com.codeborne.selenide.Selenide.`$`
 import com.jetbrains.teamcity.api.enums.Endpoint
 import com.jetbrains.teamcity.api.models.BuildType
 import com.jetbrains.teamcity.ui.constants.TestConstants
+import com.jetbrains.teamcity.ui.errors.UiErrors
 import com.jetbrains.teamcity.ui.pages.BuildTypePage
 import com.jetbrains.teamcity.ui.pages.ProjectPage
 import com.jetbrains.teamcity.ui.pages.admin.CreateBuildTypePage
+import com.jetbrains.teamcity.ui.validators.ValidateElement
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 
@@ -63,8 +64,7 @@ class CreateBuildTypeTest : BaseUiTest() {
         ).isEmpty()
 
         val error = `$`("#error_buildTypeName")
-        softy.assertThat(error.`is`(visible))
-        softy.assertThat(error.has(exactText("Build configuration name must not be empty")))
+        ValidateElement.byText(error, UiErrors.BUILD_CONFIG_NAME_MUST_NOT_BE_EMPTY)
     }
 
     @Test
@@ -89,7 +89,6 @@ class CreateBuildTypeTest : BaseUiTest() {
         ).isEmpty()
 
         val error = `$`("#error_branch")
-        softy.assertThat(error.`is`(visible))
-        softy.assertThat(error.has(exactText("Branch name must be specified")))
+        ValidateElement.byText(error, UiErrors.BRANCH_NAME_MUST_NOT_BE_EMPTY)
     }
 }
