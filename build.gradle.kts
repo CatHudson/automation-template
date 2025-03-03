@@ -32,9 +32,14 @@ tasks {
             excludeTags("Setup")
         }
     }
-    register<Test>("setupTest") {
+    register<Test>("test-setup") {
         useJUnitPlatform {
             includeTags("Setup")
+        }
+    }
+    register<Test>("test-regression") {
+        useJUnitPlatform {
+            includeTags("Regression")
         }
     }
 }

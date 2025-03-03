@@ -39,6 +39,5 @@ jobs:
       - name: TeamCity setup
         uses: ./.github/actions/teamcity-setup
 
-      - name: Run API-tests
-        continue-on-error: true
-        run: ./gradlew test --tests "com.jetbrains.teamcity.${{ inputs.package }}.**" --filter "Regression"
+      - name: Run tests
+        run: ./gradlew test-regression --tests "com.jetbrains.teamcity.${{ inputs.package }}.**"
