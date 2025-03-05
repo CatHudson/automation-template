@@ -4,12 +4,10 @@ import com.jetbrains.teamcity.BaseTest
 import com.jetbrains.teamcity.api.generators.TestDataGenerator
 import com.jetbrains.teamcity.api.models.AuthModules
 import com.jetbrains.teamcity.api.models.ServerAuthSettings
-import com.jetbrains.teamcity.api.requests.AgentAuthRequester
 import com.jetbrains.teamcity.api.requests.ServerAuthRequester
 import com.jetbrains.teamcity.api.spec.Specification
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.TestInstance
 import kotlin.properties.Delegates
 
