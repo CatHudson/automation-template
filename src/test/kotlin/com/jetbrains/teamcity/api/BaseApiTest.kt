@@ -16,14 +16,12 @@ import kotlin.properties.Delegates
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 open class BaseApiTest : BaseTest() {
     private val serverAuthRequester = ServerAuthRequester(Specification.superUserSpec())
-    private val agentAuthRequester = AgentAuthRequester(Specification.superUserSpec())
     private lateinit var initialAuthModules: AuthModules
     private var initialPerProjectPermissions by Delegates.notNull<Boolean>()
 
     @BeforeAll
     fun setUpServerPermissions() {
         val initSettings = serverAuthRequester.read()
-        println(initSettings)
         initialPerProjectPermissions = initSettings.perProjectPermissions
         initialAuthModules = initSettings.modules
 
@@ -35,12 +33,6 @@ open class BaseApiTest : BaseTest() {
                 modules = newAuthModules
             )
         )
-    }
-
-    @BeforeAll
-    fun authorizeDefaultAgent() {
-        val agent = agentAuthRequester.getAllAgents().first()
-        agentAuthRequester.authorizeAgent(agent)
     }
 
     @AfterAll
