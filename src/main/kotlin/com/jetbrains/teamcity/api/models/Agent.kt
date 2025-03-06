@@ -4,6 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Agent(
-    val id: String,
-    val name: String
+    val id: String? = null,
+    val name: String? = null
 ) : BaseModel()
