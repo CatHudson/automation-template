@@ -9,7 +9,7 @@ class AgentAuthRequester(private val specification: RequestSpecification) {
 
     companion object {
         private const val GET_ALL_AGENTS_URL = "/app/rest/agents?locator=authorized:any"
-        private const val AUTHORIZE_AGENT_URL = "/app/rest/agents/id:%s/authorized"
+        private const val AUTHORIZE_AGENT_URL = "/app/rest/agents/id:%s/authorizedInfo"
         private const val AUTH_JSON_BODY =
             """
                 {
