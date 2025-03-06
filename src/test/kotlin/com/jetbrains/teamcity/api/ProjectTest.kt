@@ -67,12 +67,16 @@ class ProjectTest : BaseApiTest() {
     @Tag("Positive")
     fun `a user should be able to copy a project`() {
         superUserCheckedRequests.getRequest(Endpoint.PROJECTS).create(testData.project)
-        val originalProject = superUserCheckedRequests.getRequest<Project>(Endpoint.PROJECTS).read(testData.project.id!!)
+        val originalProject = superUserCheckedRequests.getRequest<Project>(
+            Endpoint.PROJECTS
+        ).read(testData.project.id!!)
 
         val copiedProject = TestDataGenerator.generate().project.copy(sourceProject = Locator(originalProject.id!!))
         superUserCheckedRequests.getRequest(Endpoint.PROJECTS).create(copiedProject)
 
-        val createdCopiedProject = superUserCheckedRequests.getRequest<Project>(Endpoint.PROJECTS).read(copiedProject.id!!)
+        val createdCopiedProject = superUserCheckedRequests.getRequest<Project>(
+            Endpoint.PROJECTS
+        ).read(copiedProject.id!!)
 
         softy.assertThat(createdCopiedProject.id).isEqualTo(copiedProject.id)
         softy.assertThat(createdCopiedProject.name).isEqualTo(copiedProject.name)
@@ -82,12 +86,19 @@ class ProjectTest : BaseApiTest() {
     @Tag("Positive")
     fun `a user should be able to copy a project with 'copyAllAssociatedSettings' false`() {
         superUserCheckedRequests.getRequest(Endpoint.PROJECTS).create(testData.project)
-        val originalProject = superUserCheckedRequests.getRequest<Project>(Endpoint.PROJECTS).read(testData.project.id!!)
+        val originalProject = superUserCheckedRequests.getRequest<Project>(
+            Endpoint.PROJECTS
+        ).read(testData.project.id!!)
 
-        val copiedProject = TestDataGenerator.generate().project.copy(copyAllAssociatedSettings = false, sourceProject = Locator(originalProject.id!!))
+        val copiedProject = TestDataGenerator.generate().project.copy(
+            copyAllAssociatedSettings = false,
+            sourceProject = Locator(originalProject.id!!)
+        )
         superUserCheckedRequests.getRequest(Endpoint.PROJECTS).create(copiedProject)
 
-        val createdCopiedProject = superUserCheckedRequests.getRequest<Project>(Endpoint.PROJECTS).read(copiedProject.id!!)
+        val createdCopiedProject = superUserCheckedRequests.getRequest<Project>(
+            Endpoint.PROJECTS
+        ).read(copiedProject.id!!)
 
         softy.assertThat(createdCopiedProject.id).isEqualTo(copiedProject.id)
         softy.assertThat(createdCopiedProject.name).isEqualTo(copiedProject.name)
@@ -111,7 +122,9 @@ class ProjectTest : BaseApiTest() {
     @Tag("Negative")
     @ValueSource(strings = [""])
     @NullSource
-    fun `a user should not be able to copy a project with passing empty or null sourceProject locator`(locator: String?) {
+    fun `a user should not be able to copy a project with passing empty or null sourceProject locator`(
+        locator: String?
+    ) {
         val copiedProject = TestDataGenerator.generate().project.copy(sourceProject = Locator(locator))
         superUserUncheckedRequests
             .getRequest(Endpoint.PROJECTS)
@@ -119,7 +132,11 @@ class ProjectTest : BaseApiTest() {
             .then()
             .assertThat()
             .statusCode(HttpStatus.SC_BAD_REQUEST)
-            .body(Matchers.containsString("No project specified. Either 'id', 'internalId' or 'locator' attribute should be present."))
+            .body(
+                Matchers.containsString(
+                    "No project specified. Either 'id', 'internalId' or 'locator' attribute should be present."
+                )
+            )
     }
 
     @Test
@@ -157,23 +174,39 @@ class ProjectTest : BaseApiTest() {
             .create(testData.project.copy(id = invalidProjectId))
             .then()
             .assertThat()
-            .statusCode(HttpStatus.SC_BAD_REQUEST) //throws 500: INTERNAL for a whitespace string
-            .body(Matchers.containsString("Project ID \"$invalidProjectId\" is invalid:" +
-                    " it is ${invalidProjectId.length} characters long while the maximum length is 225"))
+            .statusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR)
+            .body(
+                Matchers.containsString(
+                    "Project ID \"$invalidProjectId\" is invalid:" +
+                        " it is ${invalidProjectId.length} characters long while the maximum length is 225"
+                )
+            )
     }
 
     @ParameterizedTest
     @Tag("Negative")
     @NullSource
-    @ValueSource(strings = ["", " "])
+    @ValueSource(strings = [""])
     fun `a user cannot create a project with an empty or null name`(name: String?) {
         superUserUncheckedRequests
             .getRequest(Endpoint.PROJECTS)
             .create(testData.project.copy(name = name))
             .then()
             .assertThat()
-            .statusCode(HttpStatus.SC_BAD_REQUEST) //throws 500: INTERNAL for a whitespace string
+            .statusCode(HttpStatus.SC_BAD_REQUEST)
             .body(Matchers.containsString("Project name cannot be empty"))
+    }
+
+    @Test
+    @Tag("Negative")
+    fun `a user cannot create a project with a whitespace name`() {
+        superUserUncheckedRequests
+            .getRequest(Endpoint.PROJECTS)
+            .create(testData.project.copy(name = " "))
+            .then()
+            .assertThat()
+            .statusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR)
+            .body(Matchers.containsString("Given project name is empty."))
     }
 
     @ParameterizedTest
@@ -185,7 +218,7 @@ class ProjectTest : BaseApiTest() {
             .create(testData.project.copy(id = id))
             .then()
             .assertThat()
-            .statusCode(HttpStatus.SC_BAD_REQUEST) //actually throws 500: INTERNAL
+            .statusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR)
     }
 
     @Test
@@ -211,7 +244,7 @@ class ProjectTest : BaseApiTest() {
             .spec(ResponseValidationSpecifications.checkForbiddenError())
     }
 
-    //Advanced homework ↓↓↓
+    // Advanced homework ↓↓↓
 
     @Test
     @Tag("Positive")

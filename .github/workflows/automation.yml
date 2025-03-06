@@ -1,0 +1,85 @@
+name: Run tests
+
+on:
+  workflow_call:
+    inputs:
+      package:
+        description: api | ui
+        required: true
+        type: string
+
+jobs:
+  validate-checkstyle:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 21
+
+#      - name: Validate checkstyle with Detekt
+#        continue-on-error: true
+#        run: ./gradlew detekt
+
+      - name: Validate checkstyle with Ktlint
+        run: ./gradlew ktlintCheck
+
+  run-tests:
+    needs: validate-checkstyle
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: TeamCity setup
+        uses: ./.github/actions/teamcity-setup
+
+      - name: Run tests
+        run: ./gradlew test-regression --tests "com.jetbrains.teamcity.${{ inputs.package }}.**"
+
+      - name: Run Swagger Coverage
+        if: always() && inputs.package == 'api'
+        run: |
+          chmod +x .swagger-coverage-commandline/bin/swagger-coverage-commandline
+          .swagger-coverage-commandline/bin/swagger-coverage-commandline -s http://$HOST:8111/app/rest/swagger.json -i build/swagger-coverage-output
+
+      - name: Save Swagger Coverage results
+        if: always() && inputs.package == 'api'
+        uses: actions/upload-artifact@v4
+        with:
+          name: swagger-coverage
+          path: |
+            swagger-coverage-report.html
+            swagger-coverage-results.json
+
+      # (https://allurereport.org/docs/integrations-github/)
+      - name: Load test report history
+        uses: actions/checkout@v4
+        if: always()
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      - name: Build test report
+        uses: simple-elf/allure-report-action@v1.7
+        if: always()
+        with:
+          gh_pages: gh-pages
+          allure_history: allure-history
+          allure_results: build/allure-results
+          subfolder: ${{ inputs.package }}
+
+      # https://gist.github.com/ramnathv/2227408
+      - name: Publish test report
+        uses: peaceiris/actions-gh-pages@v4
+        if: always()
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-history

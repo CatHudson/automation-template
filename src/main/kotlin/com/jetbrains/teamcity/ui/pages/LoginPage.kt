@@ -3,8 +3,9 @@ package com.jetbrains.teamcity.ui.pages
 import com.codeborne.selenide.Selenide
 import com.codeborne.selenide.Selenide.`$`
 import com.jetbrains.teamcity.api.models.User
+import io.qameta.allure.Step
 
-class LoginPage: BasePage() {
+class LoginPage : BasePage() {
 
     companion object {
 
@@ -14,11 +15,13 @@ class LoginPage: BasePage() {
         private val passwordInput = `$`("#password")
         private val loginButton = `$`(".loginButton")
 
+        @Step("Open login page")
         fun open(): LoginPage {
             return Selenide.open(LOGIN_URL, LoginPage::class.java)
         }
     }
 
+    @Step("Login as {user.username}")
     fun login(user: User): ProjectsPage {
         usernameInput.`val`(user.username)
         passwordInput.`val`(user.password)

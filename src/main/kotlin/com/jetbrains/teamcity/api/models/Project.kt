@@ -11,5 +11,5 @@ data class Project(
     val name: String? = null,
     val locator: String? = null,
     val copyAllAssociatedSettings: Boolean? = null,
-    val sourceProject: Locator? = null,
-): BaseModel()
+    val sourceProject: Locator? = null
+) : BaseModel()

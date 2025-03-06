@@ -1,4 +1,8 @@
 [versions]
+kotlin = "2.1.0"
+detekt = "1.23.8"
+ktlint = "11.6.1"
+
 kotlinCoroutines = "1.10.1"
 junit = "5.11.4"
 selenide = "7.7.2"
@@ -7,11 +11,20 @@ allure = "2.29.1"
 jackson = "2.18.2"
 assertJ = "3.27.3"
 wiremock = "3.12.0"
+detektFormatting = "1.23.8"
+swaggerCoverage = "1.5.0"
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 
 [libraries]
 selenide = { module = "com.codeborne:selenide", version.ref = "selenide" }
 restAssured = { module = "io.rest-assured:rest-assured", version.ref = "restAssured" }
 allure = { module = "io.qameta.allure:allure-junit5", version.ref = "allure" }
+allureRestAssured = { module = "io.qameta.allure:allure-rest-assured", version.ref = "allure" }
+allureSelenide = { module = "io.qameta.allure:allure-selenide", version.ref = "allure" }
 jackson = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
 coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinCoroutines" }
 wiremock = { module = "org.wiremock:wiremock", version.ref = "wiremock" }
@@ -19,3 +32,5 @@ junitApi = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "juni
 junitEngine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
 junitParams = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit" }
 assertJ = { module = "org.assertj:assertj-core", version.ref = "assertJ" }
+detektFormatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detektFormatting" }
+swaggerCoverage = { module = "com.github.viclovsky:swagger-coverage-rest-assured", version.ref = "swaggerCoverage" }

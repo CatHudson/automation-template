@@ -11,4 +11,4 @@ data class User(
     @Random
     val password: String = "",
     val roles: Roles = Roles()
-): BaseModel()
+) : BaseModel()
