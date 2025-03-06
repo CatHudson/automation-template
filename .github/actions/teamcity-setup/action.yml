@@ -57,6 +57,10 @@ runs:
         -p 8111:8111 \
         jetbrains/teamcity-server:latest
 
+    - name: Set up TeamCity server
+      shell: bash
+      run: ./gradlew clean server-setup
+
     - name: Run TeamCity agent
       shell: bash
       run: |
@@ -64,9 +68,9 @@ runs:
         -v $(pwd)/tmp/teamcity_agent/conf:/data/teamcity_agent/conf  \
         jetbrains/teamcity-agent:latest
 
-    - name: Set up TeamCity server and agent
+    - name: Set up TeamCity agent
       shell: bash
-      run: ./gradlew clean test-setup
+      run: ./gradlew clean agent-setup
 
     - name: Parse superuser token as env variable
       shell: bash
