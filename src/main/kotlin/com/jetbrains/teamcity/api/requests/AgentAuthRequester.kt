@@ -10,6 +10,15 @@ class AgentAuthRequester(private val specification: RequestSpecification) {
     companion object {
         private const val GET_ALL_AGENTS_URL = "/app/rest/agents?locator=authorized:any"
         private const val AUTHORIZE_AGENT_URL = "/app/rest/agents/id:%s/authorized"
+        private const val AUTH_JSON_BODY =
+            """
+                {
+                  "comment" : {
+                    "text" : "authorizing agent at setup"
+                  },
+                  "status" : true
+                }
+            """
     }
 
     fun getAllAgents(): List<Agent> {
@@ -27,7 +36,7 @@ class AgentAuthRequester(private val specification: RequestSpecification) {
         RestAssured
             .given()
             .spec(specification)
-            .body("true")
+            .body(AUTH_JSON_BODY)
             .put(AUTHORIZE_AGENT_URL.format(agent.id))
             .then()
             .assertThat()

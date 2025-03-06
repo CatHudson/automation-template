@@ -30,6 +30,11 @@ dependencies {
 }
 
 tasks {
+    withType(Test::class) {
+        testLogging {
+            events("failed")
+        }
+    }
     test {
         useJUnitPlatform {
             excludeTags("Setup")
