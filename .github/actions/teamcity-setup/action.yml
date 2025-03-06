@@ -79,5 +79,8 @@ runs:
         jetbrains/teamcity-agent:latest
 
     - name: Set up TeamCity agent
-      shell: bash
-      run: ./gradlew clean agent-setup
+      uses: nick-fields/retry@v3
+      with:
+        max_attempts: 10
+        shell: bash
+        command: ./gradlew clean agent-setup
