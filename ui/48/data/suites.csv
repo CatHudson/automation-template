@@ -1,0 +1,2 @@
+"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
+"passed","Thu Mar 06 08:09:55 GMT 2025","Thu Mar 06 08:10:42 GMT 2025","47494","","com.jetbrains.teamcity.ui.SetupServerTest","","com.jetbrains.teamcity.ui.SetupServerTest","setupTeamCityServerTest","setupTeamCityServerTest()",""
