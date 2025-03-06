@@ -60,11 +60,11 @@ runs:
     - name: Run TeamCity agent
       shell: bash
       run: |
-        docker run -e SERVER_URL=$HOST:8111  \ 
+        docker run -e SERVER_URL=$HOST:8111 --name teamcity-agent  \
         -v $(pwd)/tmp/teamcity_agent/conf:/data/teamcity_agent/conf  \
         jetbrains/teamcity-agent:latest
 
-    - name: Set up TeamCity server
+    - name: Set up TeamCity server and agent
       shell: bash
       run: ./gradlew clean test-setup
 
