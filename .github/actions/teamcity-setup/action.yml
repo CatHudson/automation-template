@@ -61,6 +61,16 @@ runs:
       shell: bash
       run: ./gradlew clean server-setup
 
+    - name: Parse superuser token as env variable
+      shell: bash
+      run: |
+        echo "SUPER_USER_TOKEN=$(docker logs teamcity-server | grep 'Super user authentication token' | tail -n 1 | awk '{print $6}')" >> $GITHUB_ENV
+
+    - name: Set up superUserToken config property
+      shell: bash
+      run: |
+        sed -i "s/^super-user-token=.*/super-user-token=$SUPER_USER_TOKEN/" src/main/resources/configuration.properties
+
     - name: Run TeamCity agent
       shell: bash
       run: |
@@ -71,13 +81,3 @@ runs:
     - name: Set up TeamCity agent
       shell: bash
       run: ./gradlew clean agent-setup
-
-    - name: Parse superuser token as env variable
-      shell: bash
-      run: |
-        echo "SUPER_USER_TOKEN=$(docker logs teamcity-server | grep 'Super user authentication token' | tail -n 1 | awk '{print $6}')" >> $GITHUB_ENV
-
-    - name: Set up superUserToken config property
-      shell: bash
-      run: |
-        sed -i "s/^super-user-token=.*/super-user-token=$SUPER_USER_TOKEN/" src/main/resources/configuration.properties
