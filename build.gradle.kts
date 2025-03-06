@@ -1,6 +1,6 @@
 plugins {
     alias(libs.plugins.kotlin.jvm)
-    alias(libs.plugins.detekt)
+//    alias(libs.plugins.detekt)
     alias(libs.plugins.ktlint)
 }
 
@@ -12,7 +12,7 @@ repositories {
 }
 
 dependencies {
-    detektPlugins(libs.detektFormatting)
+//    detektPlugins(libs.detektFormatting)
     implementation(libs.selenide)
     implementation(libs.restAssured)
     implementation(libs.allure)

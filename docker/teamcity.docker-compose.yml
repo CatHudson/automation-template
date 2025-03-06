@@ -1,0 +1,23 @@
+services:
+  teamcity-server:
+    image: jetbrains/teamcity-server:latest
+    container_name: teamcity-server
+    network_mode: bridge
+    volumes:
+      - ~/Documents/Docker/TeamCity/teamcity-server/data:/data/teamcity_server/datadir
+      - ~/Documents/Docker/TeamCity/teamcity-server/logs:/opt/teamcity/logs
+    ports:
+      - "8111:8111"
+
+  teamcity-agent:
+    image: jetbrains/teamcity-agent:latest
+    container_name: teamcity-agent
+    network_mode: bridge
+    links:
+      - teamcity-server
+    depends_on:
+      - teamcity-server
+    environment:
+      - SERVER_URL=http://teamcity-server:8111
+    volumes:
+      - ~/Documents/Docker/TeamCity/teamcity-agent/conf:/data/teamcity_agent/conf
