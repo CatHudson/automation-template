@@ -28,6 +28,9 @@ class StartBuildTest : BaseUiTest() {
             }
             .runBuildButton.click()
 
+        val buildQueue = superUserCheckedRequests.getRequest(Endpoint.BUILD_QUEUE).filter(listJsonPath = Endpoint.BUILD_QUEUE.listJsonPath)
+        softy.assertThat(buildQueue.size).isEqualTo(1)
+
         val buildTypePage = BuildTypePage.open(buildTypeWithStep.id!!)
         val buildRuns = buildTypePage.getBuildRuns()
 
