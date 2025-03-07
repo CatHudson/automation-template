@@ -2,6 +2,7 @@ package com.jetbrains.teamcity.ui
 
 import com.codeborne.selenide.Condition
 import com.jetbrains.teamcity.api.enums.Endpoint
+import com.jetbrains.teamcity.api.models.BuildRun
 import com.jetbrains.teamcity.api.models.Step
 import com.jetbrains.teamcity.api.models.Steps
 import com.jetbrains.teamcity.ui.pages.BuildTypePage
@@ -29,8 +30,9 @@ class StartBuildTest : BaseUiTest() {
             }
             .runBuildButton.click()
 
-        val buildQueue = superUserCheckedRequests.getRequest(Endpoint.BUILD_QUEUE).filter(listJsonPath = Endpoint.BUILD_QUEUE.listJsonPath)
-        assertThat(buildQueue.size).isEqualTo(1)
+        val buildQueue = superUserCheckedRequests.getRequest<BuildRun>(Endpoint.BUILD_QUEUE).filter(listJsonPath = Endpoint.BUILD_QUEUE.listJsonPath)
+        val expectedBuildRun = buildQueue.firstOrNull { it.buildType.id == buildTypeWithStep.id }
+        assertThat(expectedBuildRun).isNotNull.describedAs("The build run was not created")
 
         val buildTypePage = BuildTypePage.open(buildTypeWithStep.id!!)
         val buildRuns = buildTypePage.getBuildRuns()

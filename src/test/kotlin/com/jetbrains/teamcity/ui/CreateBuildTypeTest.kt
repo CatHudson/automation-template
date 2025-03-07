@@ -33,12 +33,12 @@ class CreateBuildTypeTest : BaseUiTest() {
 
         BuildTypePage.open(createdBuildType.project!!.id!!, createdBuildType.name!!).title.shouldHave(
             exactText(
-                createdBuildType.name!!
+                createdBuildType.name
             )
         )
 
         softy.assertThat(
-            ProjectPage.open(createdBuildType.project!!.id!!)
+            ProjectPage.open(createdBuildType.project.id)
                 .getBuildTypes()
                 .any { buildType -> buildType.name.text() == createdBuildType.name }
         ).isTrue
