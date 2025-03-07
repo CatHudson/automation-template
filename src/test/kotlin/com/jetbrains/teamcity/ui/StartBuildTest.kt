@@ -6,6 +6,7 @@ import com.jetbrains.teamcity.api.models.Step
 import com.jetbrains.teamcity.api.models.Steps
 import com.jetbrains.teamcity.ui.pages.BuildTypePage
 import com.jetbrains.teamcity.ui.pages.ProjectPage
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 
@@ -29,7 +30,7 @@ class StartBuildTest : BaseUiTest() {
             .runBuildButton.click()
 
         val buildQueue = superUserCheckedRequests.getRequest(Endpoint.BUILD_QUEUE).filter(listJsonPath = Endpoint.BUILD_QUEUE.listJsonPath)
-        softy.assertThat(buildQueue.size).isEqualTo(1)
+        assertThat(buildQueue.size).isEqualTo(1)
 
         val buildTypePage = BuildTypePage.open(buildTypeWithStep.id!!)
         val buildRuns = buildTypePage.getBuildRuns()
