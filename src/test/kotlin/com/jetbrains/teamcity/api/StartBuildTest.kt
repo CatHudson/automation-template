@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 
 @Feature("Start build")
+@Tag("Regression")
 class StartBuildTest : BaseApiTest() {
 
     @BeforeEach

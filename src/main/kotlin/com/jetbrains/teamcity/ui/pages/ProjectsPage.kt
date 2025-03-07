@@ -19,7 +19,7 @@ class ProjectsPage : BasePage() {
 
     @Step("Search {projectName} project by name")
     fun searchProjectByName(projectName: String) {
-        searchProjectInput.`val`(projectName).pressEnter().pressEnter()
+        searchProjectInput.`val`(projectName).pressEnter().pressEnter().pressEnter()
     }
 
     @Step("Get a list of projects")
