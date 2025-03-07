@@ -1,8 +1,6 @@
 package com.jetbrains.teamcity.ui
 
 import com.codeborne.selenide.Selenide
-import com.codeborne.selenide.logevents.LogEvent
-import com.codeborne.selenide.logevents.LogEventListener
 import com.codeborne.selenide.logevents.SelenideLogger
 import com.jetbrains.teamcity.BaseTest
 import com.jetbrains.teamcity.api.configuration.Configuration
@@ -14,9 +12,6 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.Timeout
-import org.junit.jupiter.api.extension.ExtensionContext
-import org.junit.jupiter.api.extension.TestWatcher
-import org.openqa.selenium.WebDriverException
 import java.util.concurrent.TimeUnit
 import com.codeborne.selenide.Configuration as SelenideConfig
 
