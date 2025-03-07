@@ -15,8 +15,9 @@ class BuildTypePage : BasePage() {
 
     @Step("Get a list of build runs")
     fun getBuildRuns(): List<BuildRunHistoryElement> {
-        if (!buildRunHistoryBlock.`is`(visible))
+        if (!buildRunHistoryBlock.`is`(visible)) {
             Selenide.refresh()
+        }
         buildRunHistoryBlock.shouldBe(visible)
         return generatePageElements(buildRunHistoryElements) {
             BuildRunHistoryElement(it)
