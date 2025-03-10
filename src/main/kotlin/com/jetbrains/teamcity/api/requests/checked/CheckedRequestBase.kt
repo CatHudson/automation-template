@@ -74,7 +74,7 @@ class CheckedRequestBase<T : BaseModel> private constructor(
             .then()
             .assertThat()
             .statusCode(HttpStatus.SC_OK)
-            .extract().jsonPath().getList<T>(listJsonPath)
+            .extract().jsonPath().getList(listJsonPath, endpoint.modelClass) as List<T>
     }
 
     internal companion object {

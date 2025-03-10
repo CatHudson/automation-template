@@ -38,7 +38,7 @@ tasks {
     }
     test {
         useJUnitPlatform {
-            excludeTags("Setup")
+            excludeTags("Agent-setup", "Server-setup")
         }
     }
     register<Test>("server-setup") {

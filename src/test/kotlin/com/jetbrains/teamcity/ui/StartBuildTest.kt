@@ -30,8 +30,13 @@ class StartBuildTest : BaseUiTest() {
             }
             .runBuildButton.click()
 
-        val buildRun = superUserCheckedRequests.getRequest<BuildRun>(Endpoint.BUILD_QUEUE).filter(listJsonPath = Endpoint.BUILD_QUEUE.listJsonPath)
-        assertThat(buildRun).describedAs("The build run was not created").isNotNull
+        val buildRun = superUserCheckedRequests
+            .getRequest<BuildRun>(Endpoint.BUILD_QUEUE)
+            .filter(
+                filters = mapOf("buildType" to buildTypeWithStep.name!!),
+                listJsonPath = Endpoint.BUILD_QUEUE.listJsonPath
+            )
+        assertThat(buildRun).describedAs("The build run was not created").isNotEmpty
 
         val buildTypePage = BuildTypePage.open(buildTypeWithStep.id!!)
         val buildRuns = buildTypePage.waitForBuildRunBlock().getBuildRuns()
