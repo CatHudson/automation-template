@@ -3,6 +3,7 @@ package com.jetbrains.teamcity.ui.pages
 import com.codeborne.selenide.Condition.visible
 import com.codeborne.selenide.Selenide
 import com.codeborne.selenide.Selenide.`$`
+import com.codeborne.selenide.collections.SizeGreaterThanOrEqual
 import com.jetbrains.teamcity.ui.elements.BuildRunHistoryElement
 import io.qameta.allure.Step
 
@@ -15,13 +16,18 @@ class BuildTypePage : BasePage() {
 
     @Step("Get a list of build runs")
     fun getBuildRuns(): List<BuildRunHistoryElement> {
+        return generatePageElements(buildRunHistoryElements) {
+            BuildRunHistoryElement(it)
+        }
+    }
+
+    fun expectBuildRunsToExist(size: Int = 1): BuildTypePage {
         if (!buildRunHistoryBlock.`is`(visible)) {
             Selenide.refresh()
         }
         buildRunHistoryBlock.shouldBe(visible)
-        return generatePageElements(buildRunHistoryElements) {
-            BuildRunHistoryElement(it)
-        }
+        buildRunHistoryElements.shouldHave(SizeGreaterThanOrEqual(size))
+        return this
     }
 
     init {
