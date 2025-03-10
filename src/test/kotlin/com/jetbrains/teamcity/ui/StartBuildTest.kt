@@ -11,7 +11,6 @@ import com.jetbrains.teamcity.ui.pages.ProjectPage
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.RepeatedTest
 import org.junit.jupiter.api.Tag
-import org.junit.jupiter.api.Test
 
 @Tag("Regression")
 class StartBuildTest : BaseUiTest() {
