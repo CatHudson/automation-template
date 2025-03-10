@@ -10,13 +10,15 @@ fun <T> executeWithRetry(
 ): T {
     val logger: Logger = LoggerFactory.getLogger("RetryBlock")
     repeat(attempts) { attempt ->
-        val result = block()
-        if (result != null) {
-            return result
-        } else {
-            logger.warn("Attempt ${attempt + 1} failed. Retrying...")
+        try {
+            val result = block()
+            if (result != null) {
+                return result
+            }
+        } catch (e: Throwable) {
+            logger.warn("Attempt ${attempt + 1} failed with exception: ${e.message}. Retrying...")
             Thread.sleep(delay)
         }
     }
-    throw IllegalStateException("$block fun failed after $attempts attempts.")
+    throw IllegalStateException("Block failed after $attempts attempts.")
 }
