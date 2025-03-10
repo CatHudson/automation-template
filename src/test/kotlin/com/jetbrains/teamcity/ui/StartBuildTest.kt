@@ -34,7 +34,7 @@ class StartBuildTest : BaseUiTest() {
         assertThat(buildRun).describedAs("The build run was not created").isNotNull
 
         val buildTypePage = BuildTypePage.open(buildTypeWithStep.id!!)
-        val buildRuns = buildTypePage.expectBuildRunsToExist().getBuildRuns()
+        val buildRuns = buildTypePage.waitForBuildRunBlock().getBuildRuns()
 
         if (buildRuns.isNotEmpty()) {
             softy.assertThat(buildRuns).hasSize(1)

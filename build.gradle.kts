@@ -33,6 +33,7 @@ tasks {
     withType(Test::class) {
         testLogging {
             events("failed")
+            exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
         }
     }
     test {
