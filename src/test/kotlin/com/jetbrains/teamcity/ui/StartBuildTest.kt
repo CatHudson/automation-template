@@ -5,6 +5,7 @@ import com.jetbrains.teamcity.api.enums.Endpoint
 import com.jetbrains.teamcity.api.models.BuildRun
 import com.jetbrains.teamcity.api.models.Step
 import com.jetbrains.teamcity.api.models.Steps
+import com.jetbrains.teamcity.executeWithRetry
 import com.jetbrains.teamcity.ui.pages.BuildTypePage
 import com.jetbrains.teamcity.ui.pages.ProjectPage
 import org.assertj.core.api.Assertions.assertThat
@@ -30,16 +31,18 @@ class StartBuildTest : BaseUiTest() {
             }
             .runBuildButton.click()
 
-        val buildRun = superUserCheckedRequests
-            .getRequest<BuildRun>(Endpoint.BUILD_QUEUE)
-            .filter(
-                filters = mapOf("buildType" to buildTypeWithStep.name!!),
-                listJsonPath = Endpoint.BUILD_QUEUE.listJsonPath
-            )
-        assertThat(buildRun).describedAs("The build run was not created").isNotEmpty
+        executeWithRetry {
+            val buildRun = superUserCheckedRequests
+                .getRequest<BuildRun>(Endpoint.BUILD_QUEUE)
+                .filter(
+                    filters = mapOf("buildType" to buildTypeWithStep.name!!),
+                    listJsonPath = Endpoint.BUILD_QUEUE.listJsonPath
+                )
+            assertThat(buildRun).describedAs("The build run was not created").isNotEmpty
+        }
 
         val buildTypePage = BuildTypePage.open(buildTypeWithStep.id!!)
-        val buildRuns = buildTypePage.waitForBuildRunBlock().getBuildRuns()
+        val buildRuns = buildTypePage.waitForBuildRunElements().getBuildRuns()
 
         if (buildRuns.isNotEmpty()) {
             softy.assertThat(buildRuns).hasSize(1)

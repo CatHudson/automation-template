@@ -3,6 +3,7 @@ package com.jetbrains.teamcity.ui.pages
 import com.codeborne.selenide.Condition.visible
 import com.codeborne.selenide.Selenide
 import com.codeborne.selenide.Selenide.`$`
+import com.codeborne.selenide.SelenideWait
 import com.jetbrains.teamcity.ui.elements.BuildRunHistoryElement
 import io.qameta.allure.Step
 
@@ -20,11 +21,11 @@ class BuildTypePage : BasePage() {
         }
     }
 
-    fun waitForBuildRunBlock(): BuildTypePage {
-        if (!buildRunHistoryBlock.`is`(visible)) {
-            Selenide.refresh()
+    fun waitForBuildRunElements(): BuildTypePage {
+        val wait = SelenideWait(Selenide.webdriver().`object`(), 5000, 250)
+        wait.withMessage("Waiting for build runs result failed").until {
+            buildRunHistoryElements.size() >= 1 || buildsInQueueIndicator.`is`(visible)
         }
-        buildRunHistoryBlock.shouldBe(visible)
         return this
     }
 
