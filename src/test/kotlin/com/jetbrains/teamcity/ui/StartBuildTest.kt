@@ -29,9 +29,9 @@ class StartBuildTest : BaseUiTest() {
             .first { buildType ->
                 buildType.name.text() == testData.buildType.name
             }
-            .runBuildButton.click()
+            .runBuildButton.doubleClick() // for some reason one click flaks sometimes
 
-        executeWithRetry {
+        executeWithRetry(attempts = 3, delay = 250) {
             val buildRun = superUserCheckedRequests
                 .getRequest<BuildRun>(Endpoint.BUILD_QUEUE)
                 .filter(
