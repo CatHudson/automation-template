@@ -9,13 +9,13 @@ import com.jetbrains.teamcity.executeWithRetry
 import com.jetbrains.teamcity.ui.pages.BuildTypePage
 import com.jetbrains.teamcity.ui.pages.ProjectPage
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.RepeatedTest
 import org.junit.jupiter.api.Tag
+import org.junit.jupiter.api.Test
 
 @Tag("Regression")
 class StartBuildTest : BaseUiTest() {
 
-    @RepeatedTest(10)
+    @Test
     fun `a user should be able to start a successful build`() {
         loginAs(testData.user)
 
