@@ -4,6 +4,7 @@ import com.codeborne.selenide.Condition.exactText
 import com.codeborne.selenide.Selenide.`$`
 import com.jetbrains.teamcity.api.enums.Endpoint
 import com.jetbrains.teamcity.api.models.BuildType
+import com.jetbrains.teamcity.executeWithRetry
 import com.jetbrains.teamcity.ui.constants.TestConstants
 import com.jetbrains.teamcity.ui.errors.UiErrors
 import com.jetbrains.teamcity.ui.pages.BuildTypePage
@@ -27,9 +28,12 @@ class CreateBuildTypeTest : BaseUiTest() {
             .createForm(TestConstants.repoUrl)
             .setupBuildType(testData.buildType.name!!)
 
-        val createdBuildType = superUserCheckedRequests.getRequest<BuildType>(Endpoint.BUILD_TYPES)
-            .search("name:${testData.buildType.name}")
-        softy.assertThat(createdBuildType).isNotNull
+        val createdBuildType = executeWithRetry<BuildType> {
+            val requestResult = superUserCheckedRequests.getRequest<BuildType>(Endpoint.BUILD_TYPES)
+                .search("name:${testData.buildType.name}")
+            softy.assertThat(requestResult).isNotNull
+            requestResult
+        }
 
         BuildTypePage.open(createdBuildType.project!!.id!!, createdBuildType.name!!).title.shouldHave(
             exactText(

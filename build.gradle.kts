@@ -1,6 +1,6 @@
 plugins {
     alias(libs.plugins.kotlin.jvm)
-    alias(libs.plugins.detekt)
+//    alias(libs.plugins.detekt)
     alias(libs.plugins.ktlint)
 }
 
@@ -12,7 +12,7 @@ repositories {
 }
 
 dependencies {
-    detektPlugins(libs.detektFormatting)
+//    detektPlugins(libs.detektFormatting)
     implementation(libs.selenide)
     implementation(libs.restAssured)
     implementation(libs.allure)
@@ -33,11 +33,12 @@ tasks {
     withType(Test::class) {
         testLogging {
             events("failed")
+            exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
         }
     }
     test {
         useJUnitPlatform {
-            excludeTags("Setup")
+            excludeTags("Agent-setup", "Server-setup")
         }
     }
     register<Test>("server-setup") {

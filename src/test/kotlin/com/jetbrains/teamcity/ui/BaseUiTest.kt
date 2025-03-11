@@ -41,7 +41,6 @@ open class BaseUiTest : BaseTest() {
                 .screenshots(true)
                 .savePageSource(true)
                 .includeSelenideSteps(true)
-                .includeSelenideSteps(true)
         )
     }
 

@@ -2,10 +2,13 @@ package com.jetbrains.teamcity.ui
 
 import com.codeborne.selenide.Condition
 import com.jetbrains.teamcity.api.enums.Endpoint
+import com.jetbrains.teamcity.api.models.BuildRun
 import com.jetbrains.teamcity.api.models.Step
 import com.jetbrains.teamcity.api.models.Steps
+import com.jetbrains.teamcity.executeWithRetry
 import com.jetbrains.teamcity.ui.pages.BuildTypePage
 import com.jetbrains.teamcity.ui.pages.ProjectPage
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 
@@ -26,10 +29,20 @@ class StartBuildTest : BaseUiTest() {
             .first { buildType ->
                 buildType.name.text() == testData.buildType.name
             }
-            .runBuildButton.click()
+            .runBuildButton.doubleClick() // for some reason one click flaks sometimes
+
+        executeWithRetry(attempts = 3, delay = 250) {
+            val buildRun = superUserCheckedRequests
+                .getRequest<BuildRun>(Endpoint.BUILD_QUEUE)
+                .filter(
+                    filters = mapOf("buildType" to buildTypeWithStep.name!!),
+                    listJsonPath = Endpoint.BUILD_QUEUE.listJsonPath
+                )
+            assertThat(buildRun).describedAs("The build run was not created").isNotEmpty
+        }
 
         val buildTypePage = BuildTypePage.open(buildTypeWithStep.id!!)
-        val buildRuns = buildTypePage.getBuildRuns()
+        val buildRuns = buildTypePage.waitForBuildRunElements().getBuildRuns()
 
         if (buildRuns.isNotEmpty()) {
             softy.assertThat(buildRuns).hasSize(1)

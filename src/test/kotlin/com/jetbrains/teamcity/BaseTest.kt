@@ -5,13 +5,16 @@ import com.jetbrains.teamcity.api.generators.TestDataStorage
 import com.jetbrains.teamcity.api.requests.checked.CheckedRequests
 import com.jetbrains.teamcity.api.requests.unchecked.UncheckedRequests
 import com.jetbrains.teamcity.api.spec.Specification
+import io.qameta.allure.junit5.AllureJunit5
 import org.assertj.core.api.SoftAssertions
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Timeout
+import org.junit.jupiter.api.extension.ExtendWith
 import java.util.concurrent.TimeUnit
 
 @Timeout(value = 20, unit = TimeUnit.SECONDS)
+@ExtendWith(AllureJunit5::class)
 open class BaseTest {
 
     protected var softy: SoftAssertions = SoftAssertions()
