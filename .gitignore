@@ -47,6 +47,7 @@ bin/
 ### Mac OS ###
 .DS_Store
 
+### Swagger Coverage ###
 /swagger-coverage-report.html
 /swagger-coverage-results.json
 swagger-codegen-cli.jar
