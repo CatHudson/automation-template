@@ -20,5 +20,5 @@ fun <T> executeWithRetry(
             Thread.sleep(delay)
         }
     }
-    throw IllegalStateException("Block failed after $attempts attempts.")
+    throw IllegalStateException("Block failed after $attempts attempts of retrying $block.")
 }
